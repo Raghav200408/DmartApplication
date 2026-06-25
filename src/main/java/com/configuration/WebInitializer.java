@@ -1,5 +1,6 @@
 package com.configuration;
-
+import jakarta.servlet.MultipartConfigElement;
+import jakarta.servlet.ServletRegistration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class WebInitializer
@@ -18,5 +19,19 @@ public class WebInitializer
     @Override
     protected String[] getServletMappings() {
         return new String[] { "/" };
+    }
+
+    @Override
+    protected void customizeRegistration(
+            ServletRegistration.Dynamic registration) {
+
+        MultipartConfigElement multipartConfig =
+                new MultipartConfigElement(
+                        null,
+                        10485760,
+                        20971520,
+                        0);
+
+        registration.setMultipartConfig(multipartConfig);
     }
 }

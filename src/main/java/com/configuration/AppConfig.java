@@ -1,7 +1,8 @@
 package com.configuration;
 
 
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 //import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
 
 @Configuration
 
@@ -24,7 +26,7 @@ public class AppConfig {
         ds.setDriverClassName("org.postgresql.Driver");
         ds.setUrl("jdbc:postgresql://localhost:5432/DmartDB");
         ds.setUsername("postgres");
-        ds.setPassword("1234");
+        ds.setPassword("ragava@2244");
 
         return ds;
     }
@@ -33,4 +35,15 @@ public class AppConfig {
     public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
     }
+
+@Bean
+public ObjectMapper objectMapper() {
+
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.registerModule(new JavaTimeModule());
+
+    return mapper;
+}
+   
+
 }
