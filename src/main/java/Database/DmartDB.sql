@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict xaxS0rKhYY1dv6OwM9PYxUajE8KYpBj912i2mE6iqQCvmyLFrf2yuE8ggB0AwEE
+
 
 -- Dumped from database version 18.3
 -- Dumped by pg_dump version 18.3
@@ -265,7 +265,7 @@ ALTER TABLE ONLY public.product ALTER COLUMN product_id SET DEFAULT nextval('pub
 --
 
 COPY public.bill_items (bill_item_id, bill_id, product_id, quantity, price, gst) FROM stdin;
-\.
+
 
 
 --
@@ -275,7 +275,6 @@ COPY public.bill_items (bill_item_id, bill_id, product_id, quantity, price, gst)
 --
 
 COPY public.bills (bill_id, customer_id, bill_date, total_amount, payment_type) FROM stdin;
-\.
 
 
 --
@@ -286,7 +285,6 @@ COPY public.bills (bill_id, customer_id, bill_date, total_amount, payment_type) 
 
 COPY public.cashier (username, password) FROM stdin;
 cashier1	1234
-\.
 
 
 --
@@ -297,7 +295,6 @@ cashier1	1234
 
 COPY public.customers (customer_id, customer_name, mobile_number) FROM stdin;
 1	Charan	9876543210
-\.
 
 
 --
@@ -308,7 +305,6 @@ COPY public.customers (customer_id, customer_name, mobile_number) FROM stdin;
 
 COPY public.product (product_id, product_name, category, price, quantity, manufacturer_name, manufacture_date, expiry_date, image_path, created_by, created_date, updated_by, updated_date) FROM stdin;
 1	Amul Milk	Dairy	30.00	100	Amul	2026-06-25	2026-06-26	1b353fba-cef0-4cec-b832-4e3552ee23be_Amulmilk.webp	1	2026-06-25 01:26:15.560766	1	2026-06-25 01:26:15.560766
-\.
 
 
 --
@@ -321,8 +317,6 @@ COPY public.products (product_id, product_name, category, quantity, price, gst) 
 P101	Rice	Grocery	100	60.00	5.00
 P102	Sugar	Grocery	50	45.00	5.00
 P103	Milk	Dairy	30	28.00	5.00
-\.
-
 
 --
 -- TOC entry 5069 (class 0 OID 0)
@@ -456,5 +450,4 @@ ALTER TABLE ONLY public.bill_items
 -- PostgreSQL database dump complete
 --
 
-\unrestrict xaxS0rKhYY1dv6OwM9PYxUajE8KYpBj912i2mE6iqQCvmyLFrf2yuE8ggB0AwEE
 

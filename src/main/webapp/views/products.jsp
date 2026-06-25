@@ -276,56 +276,58 @@ $(document).ready(function(){
 
 
 /* ===========================
-   ADD PRODUCT
+   ADD/UPADTE PRODUCT
 =========================== */
 
 $("#productForm").submit(function(e){
 
     e.preventDefault();
 
-    let formData = new FormData();
+    let formData=new FormData();
 
-    formData.append(
-        "productName",
-        $("#productName").val());
+    formData.append("productName",$("#productName").val());
 
-    formData.append(
-        "category",
-        $("#category").val());
+    formData.append("category",$("#category").val());
 
-    formData.append(
-        "price",
-        $("#price").val());
+    formData.append("price",$("#price").val());
 
-    formData.append(
-        "quantity",
-        $("#quantity").val());
+    formData.append("quantity",$("#quantity").val());
 
-    formData.append(
-        "manufacturerName",
-        $("#manufacturerName").val());
+    formData.append("manufacturerName",$("#manufacturerName").val());
 
-    formData.append(
-        "manufactureDate",
-        $("#manufactureDate").val());
+    formData.append("manufactureDate",$("#manufactureDate").val());
 
-    formData.append(
-        "expiryDate",
-        $("#expiryDate").val());
+    formData.append("expiryDate",$("#expiryDate").val());
 
-    formData.append(
-        "createdBy",
-        $("#createdBy").val());
+    formData.append("createdBy",$("#createdBy").val());
 
-    formData.append(
-        "image",
-        $("#image")[0].files[0]);
+    if($("#image")[0].files.length>0){
+
+        formData.append("image",
+
+                $("#image")[0].files[0]);
+
+    }
+
+    let id=$("#productId").val();
+
+    let url="/DmartWebApp/api/products";
+
+    let method="POST";
+
+    if(id!=""){
+
+        url="/DmartWebApp/api/products/"+id;
+
+        method="PUT";
+
+    }
 
     $.ajax({
 
-    	url:"/DmartWebApp/api/products",
+        url:url,
 
-        type:"POST",
+        type:method,
 
         data:formData,
 
@@ -339,14 +341,16 @@ $("#productForm").submit(function(e){
 
             $("#productForm")[0].reset();
 
+            $("#productId").val("");
+
             loadProducts();
+
         },
 
-        error:function(xhr){
+        error:function(){
 
-            console.log(xhr.responseText);
+            alert("Operation Failed");
 
-            alert("Error Status : " + xhr.status);
         }
 
     });
@@ -453,65 +457,52 @@ function renderTable(products){
         }
 
         rows += `
+        	<tr>
 
-        <tr>
+        	<td>${p.productId}</td>
 
-            <td>${p.productId}</td>
+        	<td>${p.productName}</td>
 
+        	<td>${p.category}</td>
 
-            <td>${p.productName}</td>
+        	<td>${p.price}</td>
 
-            <td>${p.category}</td>
+        	<td>
+        	${p.quantity}
+        	<br>
+        	${stockBadge}
+        	</td>
 
-            <td>${p.price}</td>
+        	<td>${p.manufacturerName}</td>
 
-            <td>
+        	<td>${formatDate(p.manufactureDate)}</td>
 
-                ${p.quantity}
+        	<td>${formatDate(p.expiryDate)}</td>
 
-                <br>
+        	<td>
+        	${stockBadge}
+        	</td>
 
-                ${stockBadge}
+        	<td>
 
-            </td>
+        	<button class="btn btn-warning btn-sm"
+        	onclick="editProduct(${p.productId})">
 
-            <td>${p.manufacturerName}</td>
+        	Edit
 
-            <td>${p.manufactureDate}</td>
+        	</button>
 
-            <td>
+        	<button class="btn btn-danger btn-sm ms-2"
+        	onclick="deleteProduct(${p.productId})">
 
-                ${p.expiryDate}
+        	Delete
 
-                <br>
+        	</button>
 
-                ${expiryBadge}
+        	</td>
 
-            </td>
-
-            <td>
-
-                <button
-                class="btn btn-warning btn-sm"
-                onclick="editProduct(${p.productId})">
-
-                Edit
-
-                </button>
-
-                <button
-                class="btn btn-danger btn-sm ms-2"
-                onclick="deleteProduct(${p.productId})">
-
-                Delete
-
-                </button>
-
-            </td>
-
-        </tr>
-
-        `;
+        	</tr>
+        	`;
     });
 
     $("#productTable tbody")
@@ -538,8 +529,10 @@ function editProduct(id){
             $("#price").val(p.price);
             $("#quantity").val(p.quantity);
             $("#manufacturerName").val(p.manufacturerName);
-            $("#manufactureDate").val(p.manufactureDate);
-            $("#expiryDate").val(p.expiryDate);
+            $("#manufactureDate").val(
+            		formatDate(p.manufactureDate));
+            $("#expiryDate").val(
+            		formatDate(p.expiryDate));
             $("#createdBy").val(p.createdBy);
 
             window.scrollTo(0,0);
@@ -579,6 +572,15 @@ function deleteProduct(id){
         });
     }
 }
+function formatDate(date){
+
+    if(date==null)
+        return "";
+
+    return date[0]+"-"+
+    String(date[1]).padStart(2,"0")+"-"+
+    String(date[2]).padStart(2,"0");
+}
 
 </script>
 
@@ -586,4 +588,3 @@ function deleteProduct(id){
 
 </body>
 </html>
-

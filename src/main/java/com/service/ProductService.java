@@ -33,4 +33,9 @@ public class ProductService {
     public ProductDTO searchProductById(int id) {
         return dao.searchProductById(id);
     }
+    public int updateProduct(ProductDTO product) {
+
+        return dao.updateProduct(product);
+
+    }
 }

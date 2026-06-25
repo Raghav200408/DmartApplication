@@ -125,4 +125,105 @@ public class ProductController {
 
         return service.searchProductById(id);
     }
+    @PutMapping(value="/{id}", consumes="multipart/form-data")
+    public String updateProduct(
+
+            @PathVariable("id") int id,
+
+            @RequestParam("productName") String productName,
+
+            @RequestParam("category") String category,
+
+            @RequestParam("price") double price,
+
+            @RequestParam("quantity") int quantity,
+
+            @RequestParam("manufacturerName") String manufacturerName,
+
+            @RequestParam("manufactureDate") String manufactureDate,
+
+            @RequestParam("expiryDate") String expiryDate,
+
+            @RequestParam("createdBy") int createdBy,
+
+            @RequestParam(value="image",required=false)
+            MultipartFile image){
+
+        try{
+
+            ProductDTO oldProduct =
+                    service.getProductById(id);
+
+            String fileName =
+                    oldProduct.getImagePath();
+
+            if(image!=null && !image.isEmpty()){
+
+                String uploadDir="C:/DmartUploads/";
+
+                File dir=new File(uploadDir);
+
+                if(!dir.exists()){
+
+                    dir.mkdirs();
+
+                }
+
+                fileName=
+
+                        UUID.randomUUID()
+
+                        +"_"
+
+                        +image.getOriginalFilename();
+
+                Path path=
+
+                        Paths.get(uploadDir+fileName);
+
+                Files.write(path,image.getBytes());
+
+            }
+
+            ProductDTO p=new ProductDTO();
+
+            p.setProductId(id);
+
+            p.setProductName(productName);
+
+            p.setCategory(category);
+
+            p.setPrice(price);
+
+            p.setQuantity(quantity);
+
+            p.setManufacturerName(manufacturerName);
+
+            p.setManufactureDate(
+
+                    LocalDate.parse(manufactureDate));
+
+            p.setExpiryDate(
+
+                    LocalDate.parse(expiryDate));
+
+            p.setImagePath(fileName);
+
+            p.setUpdatedBy(createdBy);
+
+            service.updateProduct(p);
+
+            return "Product Updated Successfully";
+
+        }
+
+        catch(Exception e){
+
+            e.printStackTrace();
+
+            return "Update Failed";
+
+        }
+
+    }
 }

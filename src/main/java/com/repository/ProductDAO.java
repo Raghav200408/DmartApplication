@@ -84,4 +84,49 @@ public class ProductDAO {
                 new BeanPropertyRowMapper<>(ProductDTO.class),
                 id);
     }
+    public int updateProduct(ProductDTO p) {
+
+        String sql = """
+            UPDATE product
+            SET
+                product_name=?,
+                category=?,
+                price=?,
+                quantity=?,
+                manufacturer_name=?,
+                manufacture_date=?,
+                expiry_date=?,
+                image_path=?,
+                updated_by=?,
+                updated_date=CURRENT_TIMESTAMP
+            WHERE product_id=?
+            """;
+
+        return jdbcTemplate.update(
+
+                sql,
+
+                p.getProductName(),
+
+                p.getCategory(),
+
+                p.getPrice(),
+
+                p.getQuantity(),
+
+                p.getManufacturerName(),
+
+                p.getManufactureDate(),
+
+                p.getExpiryDate(),
+
+                p.getImagePath(),
+
+                p.getUpdatedBy(),
+
+                p.getProductId()
+
+        );
+
+    }
 }
