@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict i7LDMinPkdWYN9Zw3gPxUNGu0vl7Xde3fRLl4dJEIFOSwTlyHiSLLfyCmaVqy9o
+\restrict xaxS0rKhYY1dv6OwM9PYxUajE8KYpBj912i2mE6iqQCvmyLFrf2yuE8ggB0AwEE
 
--- Dumped from database version 18.4
--- Dumped by pg_dump version 18.4
+-- Dumped from database version 18.3
+-- Dumped by pg_dump version 18.3
 
--- Started on 2026-06-24 18:31:25
+-- Started on 2026-06-25 11:35:48
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -26,7 +26,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 226 (class 1259 OID 16551)
+-- TOC entry 219 (class 1259 OID 24764)
 -- Name: bill_items; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -43,7 +43,7 @@ CREATE TABLE public.bill_items (
 ALTER TABLE public.bill_items OWNER TO postgres;
 
 --
--- TOC entry 225 (class 1259 OID 16550)
+-- TOC entry 220 (class 1259 OID 24773)
 -- Name: bill_items_bill_item_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -59,8 +59,8 @@ CREATE SEQUENCE public.bill_items_bill_item_id_seq
 ALTER SEQUENCE public.bill_items_bill_item_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5053 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 5065 (class 0 OID 0)
+-- Dependencies: 220
 -- Name: bill_items_bill_item_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -68,7 +68,7 @@ ALTER SEQUENCE public.bill_items_bill_item_id_seq OWNED BY public.bill_items.bil
 
 
 --
--- TOC entry 224 (class 1259 OID 16534)
+-- TOC entry 221 (class 1259 OID 24774)
 -- Name: bills; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -84,7 +84,7 @@ CREATE TABLE public.bills (
 ALTER TABLE public.bills OWNER TO postgres;
 
 --
--- TOC entry 223 (class 1259 OID 16533)
+-- TOC entry 222 (class 1259 OID 24782)
 -- Name: bills_bill_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -100,8 +100,8 @@ CREATE SEQUENCE public.bills_bill_id_seq
 ALTER SEQUENCE public.bills_bill_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5054 (class 0 OID 0)
--- Dependencies: 223
+-- TOC entry 5066 (class 0 OID 0)
+-- Dependencies: 222
 -- Name: bills_bill_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -109,7 +109,7 @@ ALTER SEQUENCE public.bills_bill_id_seq OWNED BY public.bills.bill_id;
 
 
 --
--- TOC entry 219 (class 1259 OID 16504)
+-- TOC entry 223 (class 1259 OID 24783)
 -- Name: cashier; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -122,7 +122,7 @@ CREATE TABLE public.cashier (
 ALTER TABLE public.cashier OWNER TO postgres;
 
 --
--- TOC entry 221 (class 1259 OID 16512)
+-- TOC entry 224 (class 1259 OID 24788)
 -- Name: customers; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -136,7 +136,7 @@ CREATE TABLE public.customers (
 ALTER TABLE public.customers OWNER TO postgres;
 
 --
--- TOC entry 220 (class 1259 OID 16511)
+-- TOC entry 225 (class 1259 OID 24794)
 -- Name: customers_customer_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -152,8 +152,8 @@ CREATE SEQUENCE public.customers_customer_id_seq
 ALTER SEQUENCE public.customers_customer_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5055 (class 0 OID 0)
--- Dependencies: 220
+-- TOC entry 5067 (class 0 OID 0)
+-- Dependencies: 225
 -- Name: customers_customer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -161,7 +161,56 @@ ALTER SEQUENCE public.customers_customer_id_seq OWNED BY public.customers.custom
 
 
 --
--- TOC entry 222 (class 1259 OID 16523)
+-- TOC entry 228 (class 1259 OID 24834)
+-- Name: product; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.product (
+    product_id integer NOT NULL,
+    product_name character varying(100) NOT NULL,
+    category character varying(50),
+    price numeric(10,2) NOT NULL,
+    quantity integer NOT NULL,
+    manufacturer_name character varying(100),
+    manufacture_date date,
+    expiry_date date,
+    image_path character varying(255),
+    created_by integer,
+    created_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_by integer,
+    updated_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.product OWNER TO postgres;
+
+--
+-- TOC entry 227 (class 1259 OID 24833)
+-- Name: product_product_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.product_product_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.product_product_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5068 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: product_product_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.product_product_id_seq OWNED BY public.product.product_id;
+
+
+--
+-- TOC entry 226 (class 1259 OID 24795)
 -- Name: products; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -178,7 +227,7 @@ CREATE TABLE public.products (
 ALTER TABLE public.products OWNER TO postgres;
 
 --
--- TOC entry 4877 (class 2604 OID 16554)
+-- TOC entry 4879 (class 2604 OID 24803)
 -- Name: bill_items bill_item_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -186,7 +235,7 @@ ALTER TABLE ONLY public.bill_items ALTER COLUMN bill_item_id SET DEFAULT nextval
 
 
 --
--- TOC entry 4875 (class 2604 OID 16537)
+-- TOC entry 4880 (class 2604 OID 24804)
 -- Name: bills bill_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -194,7 +243,7 @@ ALTER TABLE ONLY public.bills ALTER COLUMN bill_id SET DEFAULT nextval('public.b
 
 
 --
--- TOC entry 4874 (class 2604 OID 16515)
+-- TOC entry 4882 (class 2604 OID 24805)
 -- Name: customers customer_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -202,8 +251,16 @@ ALTER TABLE ONLY public.customers ALTER COLUMN customer_id SET DEFAULT nextval('
 
 
 --
--- TOC entry 5047 (class 0 OID 16551)
--- Dependencies: 226
+-- TOC entry 4883 (class 2604 OID 24837)
+-- Name: product product_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product ALTER COLUMN product_id SET DEFAULT nextval('public.product_product_id_seq'::regclass);
+
+
+--
+-- TOC entry 5050 (class 0 OID 24764)
+-- Dependencies: 219
 -- Data for Name: bill_items; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -212,8 +269,8 @@ COPY public.bill_items (bill_item_id, bill_id, product_id, quantity, price, gst)
 
 
 --
--- TOC entry 5045 (class 0 OID 16534)
--- Dependencies: 224
+-- TOC entry 5052 (class 0 OID 24774)
+-- Dependencies: 221
 -- Data for Name: bills; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -222,8 +279,8 @@ COPY public.bills (bill_id, customer_id, bill_date, total_amount, payment_type) 
 
 
 --
--- TOC entry 5040 (class 0 OID 16504)
--- Dependencies: 219
+-- TOC entry 5054 (class 0 OID 24783)
+-- Dependencies: 223
 -- Data for Name: cashier; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -233,8 +290,8 @@ cashier1	1234
 
 
 --
--- TOC entry 5042 (class 0 OID 16512)
--- Dependencies: 221
+-- TOC entry 5055 (class 0 OID 24788)
+-- Dependencies: 224
 -- Data for Name: customers; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -244,8 +301,19 @@ COPY public.customers (customer_id, customer_name, mobile_number) FROM stdin;
 
 
 --
--- TOC entry 5043 (class 0 OID 16523)
--- Dependencies: 222
+-- TOC entry 5059 (class 0 OID 24834)
+-- Dependencies: 228
+-- Data for Name: product; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.product (product_id, product_name, category, price, quantity, manufacturer_name, manufacture_date, expiry_date, image_path, created_by, created_date, updated_by, updated_date) FROM stdin;
+1	Amul Milk	Dairy	30.00	100	Amul	2026-06-25	2026-06-26	1b353fba-cef0-4cec-b832-4e3552ee23be_Amulmilk.webp	1	2026-06-25 01:26:15.560766	1	2026-06-25 01:26:15.560766
+\.
+
+
+--
+-- TOC entry 5057 (class 0 OID 24795)
+-- Dependencies: 226
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -257,8 +325,8 @@ P103	Milk	Dairy	30	28.00	5.00
 
 
 --
--- TOC entry 5056 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 5069 (class 0 OID 0)
+-- Dependencies: 220
 -- Name: bill_items_bill_item_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -266,8 +334,8 @@ SELECT pg_catalog.setval('public.bill_items_bill_item_id_seq', 1, false);
 
 
 --
--- TOC entry 5057 (class 0 OID 0)
--- Dependencies: 223
+-- TOC entry 5070 (class 0 OID 0)
+-- Dependencies: 222
 -- Name: bills_bill_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -275,8 +343,8 @@ SELECT pg_catalog.setval('public.bills_bill_id_seq', 1, false);
 
 
 --
--- TOC entry 5058 (class 0 OID 0)
--- Dependencies: 220
+-- TOC entry 5071 (class 0 OID 0)
+-- Dependencies: 225
 -- Name: customers_customer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -284,7 +352,16 @@ SELECT pg_catalog.setval('public.customers_customer_id_seq', 1, true);
 
 
 --
--- TOC entry 4889 (class 2606 OID 16562)
+-- TOC entry 5072 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: product_product_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.product_product_id_seq', 1, true);
+
+
+--
+-- TOC entry 4887 (class 2606 OID 24807)
 -- Name: bill_items bill_items_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -293,7 +370,7 @@ ALTER TABLE ONLY public.bill_items
 
 
 --
--- TOC entry 4887 (class 2606 OID 16544)
+-- TOC entry 4889 (class 2606 OID 24809)
 -- Name: bills bills_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -302,7 +379,7 @@ ALTER TABLE ONLY public.bills
 
 
 --
--- TOC entry 4879 (class 2606 OID 16510)
+-- TOC entry 4891 (class 2606 OID 24811)
 -- Name: cashier cashier_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -311,7 +388,7 @@ ALTER TABLE ONLY public.cashier
 
 
 --
--- TOC entry 4881 (class 2606 OID 16522)
+-- TOC entry 4893 (class 2606 OID 24813)
 -- Name: customers customers_mobile_number_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -320,7 +397,7 @@ ALTER TABLE ONLY public.customers
 
 
 --
--- TOC entry 4883 (class 2606 OID 16520)
+-- TOC entry 4895 (class 2606 OID 24815)
 -- Name: customers customers_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -329,7 +406,16 @@ ALTER TABLE ONLY public.customers
 
 
 --
--- TOC entry 4885 (class 2606 OID 16532)
+-- TOC entry 4899 (class 2606 OID 24847)
+-- Name: product product_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product
+    ADD CONSTRAINT product_pkey PRIMARY KEY (product_id);
+
+
+--
+-- TOC entry 4897 (class 2606 OID 24817)
 -- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -338,7 +424,7 @@ ALTER TABLE ONLY public.products
 
 
 --
--- TOC entry 4891 (class 2606 OID 16563)
+-- TOC entry 4900 (class 2606 OID 24818)
 -- Name: bill_items fk_bill; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -347,7 +433,7 @@ ALTER TABLE ONLY public.bill_items
 
 
 --
--- TOC entry 4890 (class 2606 OID 16545)
+-- TOC entry 4902 (class 2606 OID 24823)
 -- Name: bills fk_customer; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -356,7 +442,7 @@ ALTER TABLE ONLY public.bills
 
 
 --
--- TOC entry 4892 (class 2606 OID 16568)
+-- TOC entry 4901 (class 2606 OID 24828)
 -- Name: bill_items fk_product; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -364,11 +450,11 @@ ALTER TABLE ONLY public.bill_items
     ADD CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES public.products(product_id);
 
 
--- Completed on 2026-06-24 18:31:25
+-- Completed on 2026-06-25 11:35:48
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict i7LDMinPkdWYN9Zw3gPxUNGu0vl7Xde3fRLl4dJEIFOSwTlyHiSLLfyCmaVqy9o
+\unrestrict xaxS0rKhYY1dv6OwM9PYxUajE8KYpBj912i2mE6iqQCvmyLFrf2yuE8ggB0AwEE
 
