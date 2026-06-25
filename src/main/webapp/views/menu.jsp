@@ -65,7 +65,7 @@ Dmart Billing And Inventory Management System
 <a href="home.jsp" target="contentFrame"> Dashboard </a>
 <a href="customer.jsp" target="contentFrame"> Customer Search </a>
 <a href="viewcustomers.jsp" target="contentFrame"> View Customers </a>
-<a href="addproduct.jsp" target="contentFrame"> Add Product </a>
+<a href="products.jsp" target="contentFrame"> Add Product </a>
 <a href="viewproducts.jsp" target="contentFrame"> View Products </a>
 <a href="viewbills.jsp" target="contentFrame"> View Bills </a>
 <a href="login.jsp"> Logout </a>
