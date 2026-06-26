@@ -24,9 +24,9 @@ public class AppConfig {
                 new DriverManagerDataSource();
 
         ds.setDriverClassName("org.postgresql.Driver");
-        ds.setUrl("jdbc:postgresql://localhost:5432/DMartDB");
+        ds.setUrl("jdbc:postgresql://localhost:5432/Dmart_Database");
         ds.setUsername("postgres");
-        ds.setPassword("ragava@2244");
+        ds.setPassword("1234");
 
         return ds;
     }
