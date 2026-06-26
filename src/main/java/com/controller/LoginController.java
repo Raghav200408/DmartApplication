@@ -1,13 +1,12 @@
 package com.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.model.LoginDTO;
 import com.service.LoginService;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api")
@@ -17,42 +16,15 @@ public class LoginController {
     private LoginService service;
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginDTO dto) {
+    public String login(@RequestBody LoginDTO dto, HttpSession session) {
 
-        return service.validateUser(dto)
-                ? "SUCCESS"
-                : "FAIL";
+        if (service.validateUser(dto)) {
+
+            session.setAttribute("username", dto.getUsername());
+
+            return "SUCCESS";
+        }
+
+        return "FAIL";
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

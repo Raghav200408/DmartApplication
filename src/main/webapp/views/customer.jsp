@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 
@@ -12,439 +12,325 @@ pageEncoding="UTF-8"%>
 <title>Customer Management</title>
 
 <link
-href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-rel="stylesheet">
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
 
-<script
-src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <style>
-
-body{
-
-background:#f5f5f5;
-
+body {
+	margin: 0;
+	padding: 0;
+	background: #f4f6f9;
 }
 
-.card{
-
-border-radius:10px;
-
+.card {
+	border: none;
+	border-radius: 12px;
+	box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .08);
 }
 
-#registerCard{
-
-display:none;
-
+.card-header h3, .card-header h5 {
+	margin: 0;
 }
 
-#customerCard{
-
-display:none;
-
+#registerCard {
+	display: none;
 }
 
-#purchaseBtn{
-
-display:none;
-
+#customerCard {
+	display: none;
 }
 
+#purchaseBtn {
+	display: none;
+}
 </style>
 
 </head>
 
 <body>
 
-<div class="container mt-4">
+	<div class="container-fluid p-4">
 
-<div class="card shadow">
+		<div class="card shadow">
 
-<div class="card-header bg-primary text-white">
+			<div class="card-header bg-primary text-white">
 
-<h3>Customer Management</h3>
+				<h3>Customer Management</h3>
 
-</div>
+			</div>
 
-<div class="card-body">
+			<div class="card-body">
 
-<div class="row">
+				<div class="row">
 
-<div class="col-md-8">
+					<div class="col-md-8">
 
-<label class="form-label">
+						<label class="form-label"> Mobile Number </label> <input
+							type="text" class="form-control" id="searchMobile" maxlength="10"
+							placeholder="Enter Mobile Number">
 
-Mobile Number
+					</div>
 
-</label>
+					<div class="col-md-4 d-grid">
 
-<input
-type="text"
-class="form-control"
-id="searchMobile"
-maxlength="10"
-placeholder="Enter Mobile Number">
+						<label>&nbsp;</label>
 
-</div>
+						<button class="btn btn-primary" id="searchBtn">Search
+							Customer</button>
 
-<div class="col-md-4 d-grid">
+					</div>
 
-<label>&nbsp;</label>
+				</div>
 
-<button
-class="btn btn-primary"
-id="searchBtn">
+			</div>
 
-Search Customer
+		</div>
 
-</button>
+		<!-- CUSTOMER DETAILS -->
 
-</div>
+		<div class="card shadow mt-4" id="customerCard">
 
-</div>
+			<div class="card-header bg-success text-white">Customer Details
 
-</div>
+			</div>
 
-</div>
+			<div class="card-body">
 
-<!-- CUSTOMER DETAILS -->
+				<input type="hidden" id="customerId">
 
-<div
-class="card shadow mt-4"
-id="customerCard">
+				<div class="row">
 
-<div
-class="card-header bg-success text-white">
+					<div class="col-md-4">
 
-Customer Details
+						<label>Name</label> <input type="text" class="form-control"
+							id="customerName" readonly>
 
-</div>
+					</div>
 
-<div
-class="card-body">
+					<div class="col-md-4">
 
-<input
-type="hidden"
-id="customerId">
+						<label>Mobile</label> <input type="text" class="form-control"
+							id="customerMobile" readonly>
 
-<div class="row">
+					</div>
 
-<div class="col-md-4">
+				</div>
 
-<label>Name</label>
+				<div class="mt-4">
 
-<input
-type="text"
-class="form-control"
-id="customerName"
-readonly>
+					<button class="btn btn-success" id="purchaseBtn">Purchase
+						Products</button>
 
-</div>
+				</div>
 
-<div class="col-md-4">
+			</div>
 
-<label>Mobile</label>
+		</div>
 
-<input
-type="text"
-class="form-control"
-id="customerMobile"
-readonly>
+		<!-- REGISTER CUSTOMER -->
 
-</div>
+		<div class="card shadow mt-4" id="registerCard">
 
-</div>
+			<div class="card-header bg-warning">Register Customer</div>
 
-<div class="mt-4">
+			<div class="card-body">
 
-<button
-class="btn btn-success"
-id="purchaseBtn">
+				<form id="customerForm">
+					<input type="hidden" id="customerId">
 
-Purchase Products
+					<div class="row">
 
-</button>
+						<div class="col-md-6">
 
-</div>
+							<label> Customer Name </label> <input type="text" id="regName"
+								class="form-control">
 
-</div>
+						</div>
 
-</div>
+						<div class="col-md-6">
 
-<!-- REGISTER CUSTOMER -->
+							<label> Mobile Number </label> <input type="text" id="regMobile"
+								class="form-control" maxlength="10">
 
-<div
-class="card shadow mt-4"
-id="registerCard">
+						</div>
 
-<div
-class="card-header bg-warning">
+					</div>
 
-Register Customer
+					<div class="mt-3">
 
-</div>
+						<button class="btn btn-success">Register Customer</button>
 
-<div
-class="card-body">
+						<button type="reset" class="btn btn-secondary">Clear</button>
 
-<form id="customerForm">
-<input type="hidden" id="customerId">
+					</div>
 
-<div class="row">
+				</form>
 
-<div class="col-md-6">
+			</div>
 
-<label>
+		</div>
 
-Customer Name
-
-</label>
-
-<input
-type="text"
-id="regName"
-class="form-control">
-
-</div>
-
-<div class="col-md-6">
-
-<label>
-
-Mobile Number
-
-</label>
-
-<input
-type="text"
-id="regMobile"
-class="form-control"
-maxlength="10">
-
-</div>
-
-</div>
-
-<div class="mt-3">
-
-<button
-class="btn btn-success">
-
-Register Customer
-
-</button>
-
-<button
-type="reset"
-class="btn btn-secondary">
-
-Clear
-
-</button>
-
-</div>
-
-</form>
-
-</div>
-
-</div>
-
-</div>
-<!-- =====================================
+	<!-- =====================================
         REGISTERED CUSTOMERS
 ====================================== -->
 
-<div class="card mb-4">
+	<div class="card shadow mt-4">
 
-    <div class="card-header bg-dark text-white">
+		<div class="card-header bg-dark text-white">
 
-        <div class="row">
+			<div class="row">
 
-            <div class="col-md-6">
+				<div class="col-md-6">
 
-                <h5 class="mb-0">
+					<h5 class="mb-0">Registered Customers</h5>
 
-                    Registered Customers
+				</div>
 
-                </h5>
+				<div class="col-md-6">
 
-            </div>
+					<input type="text" id="customerSearch" class="form-control"
+						placeholder="Search Customer By Name or Mobile">
 
-            <div class="col-md-6">
+				</div>
 
-                <input
-                    type="text"
-                    id="customerSearch"
-                    class="form-control"
-                    placeholder="Search Customer By Name or Mobile">
+			</div>
 
-            </div>
+		</div>
 
-        </div>
+		<div class="card-body p-0">
 
-    </div>
+    <div class="table-responsive">
 
-    <div class="card-body">
-
-        <table
-            class="table table-bordered table-hover table-striped"
+        <table class="table table-bordered table-hover table-striped mb-0"
             id="customerTable">
 
-            <thead class="table-primary">
+				<thead class="table-primary">
 
-                <tr>
+					<tr>
 
-                    <th>Customer ID</th>
+						<th>Customer ID</th>
 
-                    <th>Customer Name</th>
+						<th>Customer Name</th>
 
-                    <th>Mobile Number</th>
+						<th>Mobile Number</th>
 
-                    <th width="180">
+						<th width="180">Actions</th>
 
-                        Actions
+					</tr>
 
-                    </th>
+				</thead>
 
-                </tr>
+				<tbody>
 
-            </thead>
+				</tbody>
 
-            <tbody>
+			</table>
 
-            </tbody>
+</div>   <!-- table-responsive -->
 
-        </table>
+</div>   <!-- card-body -->
 
-    </div>
+</div>   <!-- Registered Customers card -->
 
 </div>
-
-
-<!-- =====================================
+	<!-- =====================================
         PRODUCT PURCHASE MODAL
 ====================================== -->
 
-<div
-class="modal fade"
-id="productModal"
-tabindex="-1">
+	<div class="modal fade" id="productModal" tabindex="-1">
 
-<div class="modal-dialog modal-xl">
+		<div class="modal-dialog modal-xl">
 
-<div class="modal-content">
+			<div class="modal-content">
 
-<div class="modal-header bg-success text-white">
+				<div class="modal-header bg-success text-white">
 
-<h5>
+					<h5>Purchase Products</h5>
 
-Purchase Products
+					<button type="button" class="btn-close" data-bs-dismiss="modal">
 
-</h5>
+					</button>
 
-<button
-type="button"
-class="btn-close"
-data-bs-dismiss="modal">
+				</div>
 
-</button>
+				<div class="modal-body">
 
-</div>
+					<div class="row mb-3">
 
-<div class="modal-body">
+						<div class="col-md-8">
 
-<div class="row mb-3">
+							<input type="number" class="form-control" id="productIdSearch"
+								placeholder="Enter Product ID">
 
-<div class="col-md-8">
+						</div>
 
-<input
-type="number"
-class="form-control"
-id="productIdSearch"
-placeholder="Enter Product ID">
+						<div class="col-md-4">
 
-</div>
+							<button class="btn btn-primary w-100" id="searchProductBtn">
 
-<div class="col-md-4">
+								Search Product</button>
 
-<button
-class="btn btn-primary w-100"
-id="searchProductBtn">
+						</div>
 
-Search Product
+					</div>
 
-</button>
+					<table class="table table-bordered table-hover" id="productTable">
 
-</div>
+						<thead class="table-success">
 
-</div>
+							<tr>
 
-<table
-class="table table-bordered table-hover"
-id="productTable">
+								<th>ID</th>
 
-<thead class="table-success">
+								<th>Product</th>
 
-<tr>
+								<th>Category</th>
 
-<th>ID</th>
+								<th>Price</th>
 
-<th>Product</th>
+								<th>Stock</th>
 
-<th>Category</th>
+								<th>Quantity</th>
 
-<th>Price</th>
+								<th>Add</th>
 
-<th>Stock</th>
+							</tr>
 
-<th>Quantity</th>
+						</thead>
 
-<th>Add</th>
+						<tbody>
 
-</tr>
+						</tbody>
 
-</thead>
+					</table>
 
-<tbody>
+				</div>
 
-</tbody>
+				<div class="modal-footer">
 
-</table>
+					<button class="btn btn-secondary" data-bs-dismiss="modal">
 
-</div>
+						Close</button>
 
-<div class="modal-footer">
+					<button class="btn btn-success" id="viewCartBtn">View Cart
 
-<button
-class="btn btn-secondary"
-data-bs-dismiss="modal">
+					</button>
 
-Close
+				</div>
 
-</button>
+			</div>
 
-<button
-class="btn btn-success"
-id="viewCartBtn">
+		</div>
 
-View Cart
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
+	</div>
 
 
-<script
-src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
+	<script>
 
 $(document).ready(function () {
 

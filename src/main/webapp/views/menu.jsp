@@ -1,4 +1,10 @@
 <%@ page import="java.sql.*" %>
+<%
+if(session.getAttribute("username")==null){
+    response.sendRedirect("../index.jsp");
+    return;
+}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,53 +16,96 @@
 
 <style>
 
-body
-{
-    background-color:#f4f6f9;
+html, body{
+    height:100%;
+    margin:0;
+    overflow:hidden;
+    background:#f4f6f9;
 }
 
-.navbar
-{
-    background-color:#198754;
+.navbar{
+    height:75px;
+    background:#198754;
 }
 
-.sidebar
-{
-    height:100vh;
-    background-color:#146c43;
+.main-container{
+    height:calc(100vh - 75px);
+    overflow:hidden;
+}
+.row{
+    height:100%;
+}
+
+.content-area{
+    position:relative;
+    z-index:1;
+}
+
+.sidebar{
+    background:#146c43;
+    height:100%;
     padding-top:20px;
+    overflow-y:auto;
+    margin:0;
 }
 
-.sidebar a
-{
+.sidebar a{
     color:white;
     text-decoration:none;
     display:block;
     padding:12px;
 }
 
-.sidebar a:hover
-{
-    background-color:#198754;
+.sidebar a:hover{
+    background:#198754;
+}
+
+.content-area{
+    height:100%;
+    overflow:hidden;
+    padding:0;
+}
+
+.content-frame{
+    width:100%;
+    height:100%;
+    border:none;
+    display:block;
+}
+
+.container-fluid{
+    --bs-gutter-x:0;
 }
 
 </style>
 </head>
 <body>
 
-<nav class="navbar navbar-dark">
-<div class="container-fluid">
-<span class="navbar-brand mb-0 h1">
+<nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm px-0">
+    <div class="container-fluid px-3">
 
-Dmart Billing And Inventory Management System
+        <span class="navbar-brand fw-bold fs-3">
+             Dmart Billing And Inventory Management System
+        </span>
 
-</span>
-</div>
+        <div class="d-flex align-items-center">
+
+            <span class="text-white fw-semibold me-4 fs-5">
+                 Welcome, <%= session.getAttribute("username") %>
+            </span>
+
+            <a href="logout.jsp" class="btn btn-outline-light rounded-pill px-4">
+                Logout
+            </a>
+
+        </div>
+
+    </div>
 </nav>
 
-<div class="container-fluid">
-<div class="row">
-<div class="col-md-2 sidebar">
+<div class="container-fluid main-container p-0">
+<div class="row gx-0 gy-0 m-0">
+<div class="col-2 sidebar">
 
 <h5 class="text-white text-center"> Menu </h5>
 
@@ -72,15 +121,13 @@ Dmart Billing And Inventory Management System
 
 
 </div>
-<div class="col-md-10 p-0">
+<div class="col-10 content-area">
 
-<iframe
-name="contentFrame"
-src="home.jsp"
-width="100%"
-height="900px"
-style="border:none;">
-</iframe>
+    <iframe
+        name="contentFrame"
+        src="home.jsp"
+        class="content-frame">
+    </iframe>
 
 </div>
 </div>
