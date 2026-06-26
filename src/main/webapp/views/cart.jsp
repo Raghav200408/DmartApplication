@@ -1,0 +1,525 @@
+<%@ page language="java"
+contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Shopping Cart</title>
+
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<script
+src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<style>
+
+body{
+
+    background:#f5f5f5;
+
+}
+
+.card{
+
+    border-radius:12px;
+
+}
+
+.table th{
+
+    text-align:center;
+
+}
+
+.table td{
+
+    vertical-align:middle;
+
+    text-align:center;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container mt-4">
+
+<div class="card shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h3>
+
+Shopping Cart
+
+</h3>
+
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-2">
+
+<label>
+
+Customer ID
+
+</label>
+
+<input
+type="text"
+id="customerId"
+class="form-control"
+readonly>
+
+</div>
+
+<div class="col-md-5">
+
+<label>
+
+Customer Name
+
+</label>
+
+<input
+type="text"
+id="customerName"
+class="form-control"
+readonly>
+
+</div>
+
+<div class="col-md-5">
+
+<label>
+
+Mobile Number
+
+</label>
+
+<input
+type="text"
+id="customerMobile"
+class="form-control"
+readonly>
+
+</div>
+
+</div>
+
+<hr>
+<!-- ===========================
+        CART TABLE
+============================ -->
+
+<div class="table-responsive">
+
+<table
+class="table table-bordered table-hover"
+id="cartTable">
+
+<thead class="table-success">
+
+<tr>
+
+<th>Cart ID</th>
+
+<th>Product ID</th>
+
+<th>Product Name</th>
+
+<th>Price</th>
+
+<th>Quantity</th>
+
+<th>Total</th>
+
+<th width="180">
+
+Actions
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="cartBody">
+
+</tbody>
+
+</table>
+
+</div>
+
+
+<!-- ===========================
+        BILL SUMMARY
+============================ -->
+
+<div class="row mt-4">
+
+<div class="col-md-7">
+
+</div>
+
+<div class="col-md-5">
+
+<table class="table table-bordered">
+
+<tr>
+
+<th>
+
+Subtotal
+
+</th>
+
+<td id="subTotal">
+
+₹0.00
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+GST (5%)
+
+</th>
+
+<td id="gstAmount">
+
+₹0.00
+
+</td>
+
+</tr>
+
+<tr class="table-success">
+
+<th>
+
+Grand Total
+
+</th>
+
+<td id="grandTotal">
+
+₹0.00
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+
+<!-- ===========================
+        BUTTONS
+============================ -->
+
+<div class="text-end mt-3">
+
+<button
+class="btn btn-primary"
+id="continueShopping">
+
+Continue Shopping
+
+</button>
+
+<button
+class="btn btn-success"
+id="generateBill">
+
+Generate Bill
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script
+src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+$(document).ready(function(){
+
+    let params = new URLSearchParams(window.location.search);
+
+    $("#customerId").val(
+
+        params.get("customerId")
+
+    );
+
+    $("#customerName").val(
+
+        params.get("customerName")
+
+    );
+
+    $("#customerMobile").val(
+
+        params.get("mobile")
+
+    );
+
+    loadCart();
+
+});
+/*====================================
+LOAD CART
+=====================================*/
+
+function loadCart(){
+
+let customerId = $("#customerId").val();
+
+$.ajax({
+
+url : "/DmartWebApp/api/cart/" + customerId,
+
+type : "GET",
+
+success : function(cart){
+
+    renderCart(cart);
+
+},
+
+error : function(){
+
+    alert("Unable to load cart.");
+
+}
+
+});
+
+}
+/*====================================
+RENDER CART
+=====================================*/
+
+function renderCart(cart){
+
+let rows = "";
+
+let subtotal = 0;
+
+$.each(cart,function(index,item){
+
+subtotal += item.total;
+
+rows += `
+
+<tr>
+
+    <td>${item.cartId}</td>
+
+    <td>${item.productId}</td>
+
+    <td>${item.productName}</td>
+
+    <td>₹ ${item.price}</td>
+
+    <td>${item.quantity}</td>
+
+    <td>₹ ${item.total}</td>
+
+    <td>
+
+        <button
+            class="btn btn-warning btn-sm"
+            onclick="editCart(${item.cartId},
+                              ${item.price},
+                              ${item.quantity})">
+
+            Edit
+
+        </button>
+
+        <button
+            class="btn btn-danger btn-sm ms-2"
+            onclick="deleteCart(${item.cartId})">
+
+            Delete
+
+        </button>
+
+    </td>
+
+</tr>
+
+`;
+
+});
+
+$("#cartBody").html(rows);
+
+calculateTotal(subtotal);
+
+}
+/*====================================
+CALCULATE TOTAL
+=====================================*/
+
+function calculateTotal(subtotal){
+
+let gst = subtotal * 0.05;
+
+let grandTotal = subtotal + gst;
+
+$("#subTotal").text("₹ " + subtotal.toFixed(2));
+
+$("#gstAmount").text("₹ " + gst.toFixed(2));
+
+$("#grandTotal").text("₹ " + grandTotal.toFixed(2));
+
+}
+/*====================================
+EDIT CART
+=====================================*/
+
+function editCart(cartId, price, oldQty){
+
+let quantity = prompt("Enter New Quantity", oldQty);
+
+if(quantity == null){
+
+return;
+
+}
+
+quantity = parseInt(quantity);
+
+if(isNaN(quantity) || quantity <= 0){
+
+alert("Invalid Quantity");
+
+return;
+
+}
+
+$.ajax({
+
+url:"/DmartWebApp/api/cart/"+cartId,
+
+type:"PUT",
+
+contentType:"application/json",
+
+data:JSON.stringify({
+
+    price:price,
+
+    quantity:quantity
+
+}),
+
+success:function(response){
+
+    alert(response);
+
+    loadCart();
+
+},
+
+error:function(){
+
+    alert("Unable To Update Cart");
+
+}
+
+});
+
+}
+/*====================================
+DELETE CART ITEM
+=====================================*/
+
+function deleteCart(cartId){
+
+if(confirm("Remove Product From Cart?")){
+
+$.ajax({
+
+    url:"/DmartWebApp/api/cart/"+cartId,
+
+    type:"DELETE",
+
+    success:function(response){
+
+        alert(response);
+
+        loadCart();
+
+    },
+
+    error:function(){
+
+        alert("Delete Failed");
+
+    }
+
+});
+
+}
+
+}
+/*====================================
+CONTINUE SHOPPING
+=====================================*/
+
+$("#continueShopping").click(function(){
+
+window.history.back();
+
+});
+/*====================================
+GENERATE BILL
+=====================================*/
+
+$("#generateBill").click(function(){
+
+let customerId = $("#customerId").val();
+
+window.location.href =
+    "billing.jsp?customerId=" + customerId;
+
+});
+
+</script>
+
+</body>
+
+</html>
