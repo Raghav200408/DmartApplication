@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict DsSOzMeZjkBbILB1u1uhcDq6ZIn8H8WIEvMp8bXTenoNGsoEQyqAGhCwtWbSqR9
+\restrict i4ZimXifCSPlPEVbMBY4xQv1L2nVi2VoDWUWtFhqvvjbANrKkPDPD3pRmlRTmaB
 
 -- Dumped from database version 18.4
 -- Dumped by pg_dump version 18.4
 
--- Started on 2026-06-26 16:49:21
+-- Started on 2026-06-27 12:45:13
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -36,7 +36,8 @@ CREATE TABLE public.bill_items (
     product_id integer NOT NULL,
     quantity integer NOT NULL,
     price numeric(10,2) NOT NULL,
-    gst numeric(5,2) NOT NULL
+    gst numeric(5,2) NOT NULL,
+    total numeric(10,2)
 );
 
 
@@ -298,7 +299,21 @@ ALTER TABLE ONLY public.product ALTER COLUMN product_id SET DEFAULT nextval('pub
 -- Data for Name: bill_items; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.bill_items (bill_item_id, bill_id, product_id, quantity, price, gst) FROM stdin;
+COPY public.bill_items (bill_item_id, bill_id, product_id, quantity, price, gst, total) FROM stdin;
+1	3	1	5	10.00	5.00	50.00
+2	5	1	5	10.00	5.00	50.00
+3	2	1	5	10.00	5.00	50.00
+4	1	1	5	10.00	5.00	50.00
+5	6	1	5	10.00	5.00	50.00
+6	4	1	5	10.00	5.00	50.00
+7	7	1	1	10.00	5.00	10.00
+8	8	1	1	10.00	5.00	10.00
+9	9	1	1	10.00	5.00	10.00
+10	12	1	1	10.00	5.00	10.00
+11	14	1	6	10.00	5.00	60.00
+12	15	1	10	10.00	5.00	100.00
+13	16	2	3	30.00	5.00	90.00
+14	16	1	1	10.00	5.00	10.00
 \.
 
 
@@ -309,6 +324,22 @@ COPY public.bill_items (bill_item_id, bill_id, product_id, quantity, price, gst)
 --
 
 COPY public.bills (bill_id, customer_id, bill_date, total_amount, payment_type) FROM stdin;
+2	1	2026-06-26 21:19:08.068988	50.00	UPI
+1	1	2026-06-26 21:19:08.04707	50.00	UPI
+3	1	2026-06-26 21:19:08.091243	50.00	UPI
+4	1	2026-06-26 21:19:08.190312	50.00	UPI
+6	1	2026-06-26 21:19:08.20456	50.00	UPI
+5	1	2026-06-26 21:19:08.193821	50.00	UPI
+7	1	2026-06-26 21:21:18.160005	10.00	Cash
+8	2	2026-06-26 21:22:04.872151	10.00	Cash
+9	3	2026-06-26 21:35:18.4305	10.00	Cash
+10	3	2026-06-26 21:36:59.563572	0.00	Cash
+11	3	2026-06-26 21:41:21.497665	0.00	Cash
+12	4	2026-06-26 21:43:10.432158	10.00	Cash
+13	4	2026-06-26 21:45:09.550199	0.00	Cash
+14	1	2026-06-26 22:53:47.462042	60.00	Cash
+15	1	2026-06-26 23:12:21.739741	100.00	UPI
+16	1	2026-06-27 11:51:25.398573	100.00	Cash
 \.
 
 
@@ -319,6 +350,7 @@ COPY public.bills (bill_id, customer_id, bill_date, total_amount, payment_type) 
 --
 
 COPY public.cart (cart_id, customer_id, product_id, quantity, price, total, added_date) FROM stdin;
+6	3	1	3	10.00	30.00	2026-06-26 22:41:22.273276
 \.
 
 
@@ -329,6 +361,9 @@ COPY public.cart (cart_id, customer_id, product_id, quantity, price, total, adde
 --
 
 COPY public.cashier (username, password) FROM stdin;
+cashier1	1234
+ragha	1234
+charan	1234
 \.
 
 
@@ -339,6 +374,10 @@ COPY public.cashier (username, password) FROM stdin;
 --
 
 COPY public.customers (customer_id, customer_name, mobile_number) FROM stdin;
+1	charan	987654321
+2	ragha	123456789
+3	shiva	9876789876
+4	siddharth	567856782
 \.
 
 
@@ -349,6 +388,8 @@ COPY public.customers (customer_id, customer_name, mobile_number) FROM stdin;
 --
 
 COPY public.product (product_id, product_name, category, price, quantity, manufacturer_name, manufacture_date, expiry_date, image_path, created_by, created_date, updated_by, updated_date) FROM stdin;
+1	Water Bottle	Grocery 	10.00	0	TATA	2026-06-20	2026-06-28	b17d1a05-4d23-4810-bfb1-863083495fe4_tataWaterBottle.png	1	2026-06-26 16:56:50.688447	1	2026-06-27 11:02:47.387692
+2	Bread	Grocery	30.00	97	TATA	2026-06-20	2026-06-30	597487e1-db11-4a8b-8af1-473731486f77_IMG_4692.jpg	2	2026-06-27 11:40:47.937412	2	2026-06-27 12:10:28.043641
 \.
 
 
@@ -358,7 +399,7 @@ COPY public.product (product_id, product_name, category, price, quantity, manufa
 -- Name: bill_items_bill_item_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.bill_items_bill_item_id_seq', 1, false);
+SELECT pg_catalog.setval('public.bill_items_bill_item_id_seq', 14, true);
 
 
 --
@@ -367,7 +408,7 @@ SELECT pg_catalog.setval('public.bill_items_bill_item_id_seq', 1, false);
 -- Name: bills_bill_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.bills_bill_id_seq', 1, false);
+SELECT pg_catalog.setval('public.bills_bill_id_seq', 16, true);
 
 
 --
@@ -376,7 +417,7 @@ SELECT pg_catalog.setval('public.bills_bill_id_seq', 1, false);
 -- Name: cart_cart_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cart_cart_id_seq', 1, false);
+SELECT pg_catalog.setval('public.cart_cart_id_seq', 10, true);
 
 
 --
@@ -385,7 +426,7 @@ SELECT pg_catalog.setval('public.cart_cart_id_seq', 1, false);
 -- Name: customers_customer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.customers_customer_id_seq', 1, false);
+SELECT pg_catalog.setval('public.customers_customer_id_seq', 4, true);
 
 
 --
@@ -394,7 +435,7 @@ SELECT pg_catalog.setval('public.customers_customer_id_seq', 1, false);
 -- Name: product_product_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.product_product_id_seq', 1, false);
+SELECT pg_catalog.setval('public.product_product_id_seq', 2, true);
 
 
 --
@@ -505,11 +546,11 @@ ALTER TABLE ONLY public.bill_items
     ADD CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES public.product(product_id);
 
 
--- Completed on 2026-06-26 16:49:21
+-- Completed on 2026-06-27 12:45:13
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict DsSOzMeZjkBbILB1u1uhcDq6ZIn8H8WIEvMp8bXTenoNGsoEQyqAGhCwtWbSqR9
+\unrestrict i4ZimXifCSPlPEVbMBY4xQv1L2nVi2VoDWUWtFhqvvjbANrKkPDPD3pRmlRTmaB
 
