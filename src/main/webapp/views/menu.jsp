@@ -116,8 +116,8 @@ html, body{
 
 <a href="products.jsp" target="contentFrame"> Add Product </a>
 
-<a href="viewbills.jsp" target="contentFrame"> Billing</a>
-<a href="viewbills.jsp" target="contentFrame"> View Bills </a>
+<a href="billing.jsp" target="contentFrame"> Billing</a>
+<a href="viewbills.jsp" target="contentFrame">View Bills</a>
 
 
 </div>

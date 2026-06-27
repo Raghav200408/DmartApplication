@@ -57,7 +57,7 @@ body{
 
 <div class="card shadow">
 
-<div class="card-header bg-primary text-white">
+<div class="card-header text-white" style="background:#198754;">
 
 <h3>
 
@@ -511,10 +511,14 @@ GENERATE BILL
 
 $("#generateBill").click(function(){
 
-let customerId = $("#customerId").val();
+    let customerId = $("#customerId").val();
+    let customerName = $("#customerName").val();
+    let mobile = $("#customerMobile").val();
 
-window.location.href =
-    "billing.jsp?customerId=" + customerId;
+    window.location.href =
+        "billing.jsp?customerId=" + customerId +
+        "&customerName=" + encodeURIComponent(customerName) +
+        "&mobile=" + mobile;
 
 });
 

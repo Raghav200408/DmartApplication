@@ -17,6 +17,8 @@ public class CartDTO {
     private int quantity;
 
     private double total;
+    
+    private double gst;
 
     private LocalDateTime addedDate;
 
@@ -78,6 +80,14 @@ public class CartDTO {
 
     public void setTotal(double total) {
         this.total = total;
+    }
+    
+    public double getGst() {
+        return gst;
+    }
+
+    public void setGst(double gst) {
+        this.gst = gst;
     }
 
     public LocalDateTime getAddedDate() {

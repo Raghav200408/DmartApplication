@@ -55,7 +55,7 @@ body {
 
 		<div class="card shadow">
 
-			<div class="card-header bg-primary text-white">
+			<div class="card-header text-white" style="background:#198754;">
 
 				<h3>Customer Management</h3>
 
@@ -77,8 +77,9 @@ body {
 
 						<label>&nbsp;</label>
 
-						<button class="btn btn-primary" id="searchBtn">Search
-							Customer</button>
+						<button class="btn btn-success" id="searchBtn">
+    <i class="bi bi-search"></i> Search Customer
+</button>
 
 					</div>
 
@@ -268,9 +269,9 @@ body {
 
 						<div class="col-md-4">
 
-							<button class="btn btn-primary w-100" id="searchProductBtn">
-
-								Search Product</button>
+							<button class="btn btn-success w-100" id="searchProductBtn">
+    <i class="bi bi-search"></i> Search Product
+</button>
 
 						</div>
 
