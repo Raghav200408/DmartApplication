@@ -10,6 +10,8 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +23,8 @@ import com.service.ProductService;
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
-
+	 private static final Logger logger =
+	            LogManager.getLogger(ProductController.class);
     @Autowired
     private ProductService service;
 
@@ -45,7 +48,7 @@ public class ProductController {
         @RequestParam("createdBy") int createdBy,
 
         @RequestParam("image") MultipartFile image
-    ) {
+    ) {   logger.info("Add Product request received.");
 
         try {
 
@@ -89,10 +92,15 @@ public class ProductController {
             p.setUpdatedBy(createdBy);
 
             service.addProduct(p);
+            logger.debug("Product added successfully. Name={}, Category={}, CreatedBy={}",
+                    productName,
+                    category,
+                    createdBy);
 
             return "Product Added Successfully";
 
         } catch (Exception e) {
+        	  logger.error("Failed to add product.", e);
 
             e.printStackTrace();
 
@@ -122,16 +130,17 @@ public class ProductController {
             int result = service.deleteProduct(id);
 
             if (result > 0) {
+            	logger.info("Product deleted successfully. ProductId={}", id);
                 return ResponseEntity.ok("Product Deleted Successfully");
             }
-
+            logger.warn("Delete failed. Product not found. ProductId={}", id);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body("Product Not Found");
 
         }
         catch (DataIntegrityViolationException e) {
-
+            
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
                     .body("Cannot delete product because it is already used in billing.");
@@ -232,12 +241,16 @@ public class ProductController {
             p.setUpdatedBy(createdBy);
 
             service.updateProduct(p);
+            logger.info("Product updated successfully. ProductId={}, UpdatedBy={}",
+                    id,
+                    createdBy);
 
             return "Product Updated Successfully";
 
         }
 
         catch(Exception e){
+        	logger.error("Failed to update product {}", id, e);
 
             e.printStackTrace();
 

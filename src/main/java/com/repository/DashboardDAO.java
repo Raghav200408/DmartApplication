@@ -74,7 +74,7 @@ public class DashboardDAO {
                 SELECT *
                 FROM product
                 ORDER BY created_date DESC
-                LIMIT 5
+                LIMIT 4
                 """;
 
         return jdbcTemplate.query(

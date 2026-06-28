@@ -11,11 +11,13 @@ import org.springframework.http.ResponseEntity;
 
 import com.model.CustomerDTO;
 import com.service.CustomerService;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
-
+	private static final Logger logger =
+            LogManager.getLogger(ProductController.class);
     @Autowired
     private CustomerService service;
 
@@ -37,9 +39,12 @@ public class CustomerController {
         int result = service.addCustomer(customer);
 
         if (result > 0) {
+        	logger.info("Customer registered. Name={}, Mobile={}",
+        	        customer.getCustomerName(),
+        	        customer.getMobileNumber());
             return ResponseEntity.ok("Customer Registered Successfully");
         }
-
+        logger.warn("Registration failed");
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Registration Failed");
@@ -102,7 +107,7 @@ public class CustomerController {
         int result = service.updateCustomer(customer);
 
         if(result > 0){
-
+        	logger.info("Customer updated. CustomerId={}", id);
             return "Customer Updated Successfully";
 
         }
@@ -124,6 +129,7 @@ public class CustomerController {
             if(force){
 
                 service.deleteCustomerAndBills(id);
+                logger.info("Customer deleted. CustomerId={}", id);
 
                 return ResponseEntity.ok("Customer Deleted Successfully");
 

@@ -14,11 +14,13 @@ import com.model.BillingDTO;
 import com.model.BillingSummaryDTO;
 import com.model.InvoiceDTO;
 import com.service.BillingService;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 @RestController
 @RequestMapping("/api/billing")
 public class BillingController {
-
+	 private static final Logger logger =
+	            LogManager.getLogger(ProductController.class);
     @Autowired
     private BillingService billingService;
 
@@ -33,7 +35,11 @@ public class BillingController {
     public int generateBill(
             @RequestParam("customerId") int customerId,
             @RequestParam("paymentType") String paymentType) {
-
+    	logger.info(
+    		    "Bill generated.  CustomerId={}, PaymentType={}",
+    		    customerId,
+    		    paymentType
+    		);
         return billingService.generateBill(customerId, paymentType);
 
     }

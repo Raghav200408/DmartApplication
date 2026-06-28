@@ -2,16 +2,20 @@ package com.controller;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import com.model.CartDTO;
 import com.service.CartService;
 
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {
-
+	 private static final Logger logger =
+	            LogManager.getLogger(ProductController.class);
     @Autowired
     private CartService service;
 
@@ -25,6 +29,9 @@ public class CartController {
         int result = service.addToCart(cart);
 
         if (result > 0) {
+        	logger.info("Product added to cart. CustomerId={}, ProductId={}",
+        	        cart.getCustomerId(),
+        	        cart.getProductId());
 
             return "Product Added To Cart";
 
@@ -62,6 +69,7 @@ public class CartController {
         int result = service.updateCart(cart);
 
         if (result > 0) {
+        	logger.info("Cart updated. CartId={}", cartId);
 
             return "Cart Updated Successfully";
 
@@ -82,6 +90,7 @@ public class CartController {
         int result = service.deleteCartItem(cartId);
 
         if (result > 0) {
+        	logger.info("Cart item deleted. CartId={}", cartId);
 
             return "Product Removed From Cart";
 
@@ -102,7 +111,7 @@ public class CartController {
         int result = service.clearCart(customerId);
 
         if (result > 0) {
-
+        	logger.info("Cart cleared. CustomerId={}", customerId);
             return "Cart Cleared Successfully";
 
         }
