@@ -107,13 +107,33 @@ public class CustomerDAO {
     // =============================
     // DELETE CUSTOMER
     // =============================
+ public int deleteCustomer(int id) {
 
-    public int deleteCustomer(int id) {
+     String sql = "DELETE FROM customers WHERE customer_id=?";
 
-        String sql =
-                "DELETE FROM customers WHERE customer_id=?";
+     return jdbcTemplate.update(sql, id);
 
-        return jdbcTemplate.update(sql, id);
+ }
+
+//=============================
+//DELETE CUSTOMER WITH BILLS
+//=============================
+    public void deleteCustomerAndBills(int customerId) {
+
+        jdbcTemplate.update(
+            "DELETE FROM bill_items WHERE bill_id IN (SELECT bill_id FROM bills WHERE customer_id=?)",
+            customerId
+        );
+
+        jdbcTemplate.update(
+            "DELETE FROM bills WHERE customer_id=?",
+            customerId
+        );
+
+        jdbcTemplate.update(
+            "DELETE FROM customers WHERE customer_id=?",
+            customerId
+        );
 
     }
 

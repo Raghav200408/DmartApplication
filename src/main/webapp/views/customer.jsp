@@ -62,14 +62,23 @@ body {
 			</div>
 
 			<div class="card-body">
+			<div id="customerAlert"
+     class="alert d-none mb-3"
+     role="alert">
+</div>
 
 				<div class="row">
 
 					<div class="col-md-8">
 
 						<label class="form-label"> Mobile Number </label> <input
-							type="text" class="form-control" id="searchMobile" maxlength="10"
-							placeholder="Enter Mobile Number">
+    type="tel"
+    class="form-control"
+    id="searchMobile"
+    maxlength="10"
+    inputmode="numeric"
+    autocomplete="off"
+    placeholder="Enter 10-digit Mobile Number">
 
 					</div>
 
@@ -191,8 +200,11 @@ body {
 
 				<div class="col-md-6">
 
-					<input type="text" id="customerSearch" class="form-control"
-						placeholder="Search Customer By Name or Mobile">
+					<input
+    type="text"
+    id="customerSearch"
+    class="form-control"
+    placeholder="Search Customer By Name or Mobile">
 
 				</div>
 
@@ -257,6 +269,11 @@ body {
 				</div>
 
 				<div class="modal-body">
+				
+				<div id="productAlert"
+     class="alert d-none mb-3"
+     role="alert">
+</div>
 
 					<div class="row mb-3">
 
@@ -327,32 +344,98 @@ body {
 
 	</div>
 
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
 
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger text-white">
+
+                <h5 class="modal-title">
+                    Delete Customer
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body" id="deleteModalBody">
+
+    Are you sure you want to delete this customer?
+
+</div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    id="confirmDelete">
+
+                    Delete
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+		
 	<script>
+	
+	let deleteCustomerId = 0;
+	
+	function showAlert(message, type){
 
-$(document).ready(function () {
+	    $("#customerAlert")
+	        .removeClass("d-none alert-success alert-danger alert-warning alert-info")
+	        .addClass("alert-" + type)
+	        .html(message)
+	        .removeClass("d-none");
 
-    loadCustomers();
+	    setTimeout(function(){
 
-    $("#searchBtn").click(function () {
+	        $("#customerAlert").addClass("d-none");
 
-        searchCustomer();
+	    },3000);
 
-    });
+	}
+	
+	function showProductAlert(message, type){
 
-    $("#customerForm").submit(function (e) {
+	    $("#productAlert")
+	        .removeClass("d-none alert-success alert-danger alert-warning alert-info")
+	        .addClass("alert-" + type)
+	        .html(message)
+	        .removeClass("d-none");
 
-        e.preventDefault();
+	    setTimeout(function(){
 
-        registerCustomer();
+	        $("#productAlert").addClass("d-none");
 
-    });
+	    },3000);
 
-});
-
+	}
 
 /*====================================
       LOAD ALL CUSTOMERS
@@ -374,7 +457,7 @@ function loadCustomers() {
 
         error: function () {
 
-            alert("Unable to load customers.");
+        	showAlert("Unable to load customers.","danger");
 
         }
 
@@ -387,80 +470,89 @@ function loadCustomers() {
       SEARCH CUSTOMER
 =====================================*/
 
-function searchCustomer() {
-	alert("searchCustomer called");
+function searchCustomer(){
 
-    let mobile = $("#searchMobile").val();
+    let mobile = $("#searchMobile").val().trim();
 
-    if (mobile == "") {
+    if(mobile.length != 10){
 
-        alert("Enter Mobile Number");
-
+        showAlert("Please enter a valid 10-digit mobile number.","warning");
         return;
 
     }
 
     $.ajax({
 
-        url: "/DmartWebApp/api/customers/search/" + mobile,
+        url:"/DmartWebApp/api/customers/search/" + mobile,
 
-        type: "GET",
+        type:"GET",
 
         success:function(customer){
-        	 alert("Success");
 
-        	 if(customer==null){
+            if(customer == null){
 
-     		    alert("Customer is NULL");
+                $("#customerCard").hide();
+                $("#purchaseBtn").hide();
+                $("#registerCard").show();
 
-     		    $("#customerCard").hide();
+                $("#regMobile").val(mobile);
+                $("#regName").val("");
 
-     		    $("#purchaseBtn").hide();
+                showAlert("Customer not found. Please register.","warning");
 
-     		    $("#registerCard").show();
+                return;
 
-     		    alert("Showing Register Card");
-
-     		    $("#regMobile").val($("#searchMobile").val());
-
-     		    $("#regName").val("");
-
-     		    return;
-     		}
+            }
 
             $("#customerId").val(customer.customerId);
-
-            $("#customerCode").val(customer.customerId);
-
             $("#customerName").val(customer.customerName);
-
             $("#customerMobile").val(customer.mobileNumber);
 
             $("#customerCard").show();
-
             $("#purchaseBtn").show();
-
             $("#registerCard").hide();
 
         },
 
-        error: function () {
+        error:function(){
 
             $("#customerCard").hide();
-
             $("#purchaseBtn").hide();
-
             $("#registerCard").show();
 
-            $("#regMobile").val($("#searchMobile").val());
+            $("#regMobile").val(mobile);
+
+            showAlert("Customer not found. Please register.","warning");
 
         }
 
     });
 
 }
+$(document).ready(function () {
 
+    loadCustomers();
 
+    $("#searchMobile").on("input", function () {
+
+        this.value = this.value.replace(/\D/g, "");
+
+        if (this.value.length > 10) {
+            this.value = this.value.substring(0, 10);
+        }
+
+    });
+
+    $("#searchBtn").click(function () {
+        searchCustomer();
+    });
+
+    $("#customerForm").submit(function (e) {
+        e.preventDefault();
+        registerCustomer();
+    });
+
+});
 /*====================================
       REGISTER CUSTOMER
 =====================================*/
@@ -478,13 +570,11 @@ function registerCustomer() {
     let id = $("#customerId").val();
 
     let url = "/DmartWebApp/api/customers";
-
     let method = "POST";
 
     if(id != ""){
 
         url = "/DmartWebApp/api/customers/" + id;
-
         method = "PUT";
 
     }
@@ -492,30 +582,54 @@ function registerCustomer() {
     $.ajax({
 
         url: url,
-
         type: method,
-
         contentType: "application/json",
-
         data: JSON.stringify(customer),
 
         success: function(response){
 
-            alert(response);
-
-            $("#customerForm")[0].reset();
-
-            $("#customerId").val("");
+            let mobile = $("#regMobile").val();
 
             $("#registerCard").hide();
 
             loadCustomers();
 
+            // Search the newly registered customer
+            $.ajax({
+
+                url: "/DmartWebApp/api/customers/search/" + mobile,
+                type: "GET",
+
+                success:function(customer){
+
+                    $("#customerId").val(customer.customerId);
+                    $("#customerName").val(customer.customerName);
+                    $("#customerMobile").val(customer.mobileNumber);
+
+                    $("#customerCard").show();
+                    $("#purchaseBtn").show();
+
+                    $("#customerForm")[0].reset();
+
+                    showAlert(response,"success");
+
+                }
+
+            });
+
         },
 
-        error: function(){
+        error: function(xhr){
 
-            alert("Operation Failed");
+            if(xhr.status == 400){
+
+                showAlert(xhr.responseText,"warning");
+
+            }else{
+
+                showAlert("Unable to register customer.","danger");
+
+            }
 
         }
 
@@ -607,34 +721,119 @@ DELETE CUSTOMER
 
 function deleteCustomer(id){
 
-if(confirm("Delete this customer?")){
+    deleteCustomerId = id;
 
-  $.ajax({
+    $("#deleteModalBody").html(`
+        <div class="alert alert-warning mb-3">
+            <strong>Confirm Deletion</strong>
+        </div>
 
-      url:"/DmartWebApp/api/customers/"+id,
+        Are you sure you want to delete this customer?
+    `);
 
-      type:"DELETE",
-
-      success:function(response){
-
-          alert(response);
-
-          loadCustomers();
-
-      },
-
-      error:function(){
-
-          alert("Delete Failed");
-
-      }
-
-  });
+    new bootstrap.Modal(
+        document.getElementById("deleteModal")
+    ).show();
 
 }
 
-}
+$("#confirmDelete").click(function(){
 
+	$.ajax({
+	    url: "/DmartWebApp/api/customers/" + deleteCustomerId + "?force=true",
+	    type: "DELETE",
+
+        success:function(response){
+
+            bootstrap.Modal
+                .getInstance(document.getElementById("deleteModal"))
+                .hide();
+
+            showAlert(response,"success");
+
+            loadCustomers();
+
+        },
+
+        error:function(xhr){
+
+            if(xhr.status == 409){
+
+                $("#deleteModalBody").html(`
+
+                    <div class="alert alert-danger">
+
+                        <strong>Purchase History Found</strong>
+
+                    </div>
+
+                    This customer already has bills.
+
+                    <br><br>
+
+                    Deleting this customer will permanently remove:
+
+                    <ul class="mt-2">
+                        <li>Customer Details</li>
+                        <li>All Bills</li>
+                        <li>All Bill Items</li>
+                    </ul>
+
+                    <strong class="text-danger">
+                        This action cannot be undone.
+                    </strong>
+
+                `);
+
+                $("#confirmDelete")
+                    .text("Delete Everything")
+                    .removeClass("btn-danger")
+                    .addClass("btn-danger")
+                    .off("click")
+                    .on("click", function(){
+
+                        $.ajax({
+
+                            url:"/DmartWebApp/api/customers/" + deleteCustomerId + "?force=true",
+
+                            type:"DELETE",
+
+                            success:function(response){
+
+                                bootstrap.Modal
+                                    .getInstance(document.getElementById("deleteModal"))
+                                    .hide();
+
+                                $("#confirmDelete")
+                                    .text("Delete")
+                                    .off("click")
+                                    .on("click", arguments.callee);
+
+                                showAlert(response,"success");
+
+                                loadCustomers();
+
+                            }
+
+                        });
+
+                    });
+
+            }else{
+
+                bootstrap.Modal
+                    .getInstance(document.getElementById("deleteModal"))
+                    .hide();
+
+                showAlert(xhr.responseText,"warning");
+
+            }
+
+        }
+
+    });
+
+});
 
 /*====================================
 SEARCH CUSTOMER TABLE
@@ -688,7 +887,7 @@ let id = $("#productIdSearch").val();
 
 if(id==""){
 
-  alert("Enter Product ID");
+	showProductAlert("Please enter Product ID.","warning");
 
   return;
 
@@ -708,7 +907,7 @@ $.ajax({
 
   error:function(){
 
-      alert("Product Not Found");
+	  showProductAlert("Product Not Found.","danger");
 
   }
 
@@ -778,7 +977,7 @@ function addToCart(productId, price, stock){
 
     if(quantity<=0){
 
-        alert("Enter Valid Quantity");
+    	showProductAlert("Enter a valid quantity.","warning");
 
         return;
 
@@ -786,7 +985,7 @@ function addToCart(productId, price, stock){
 
     if(quantity>stock){
 
-        alert("Only "+stock+" items available.");
+    	showProductAlert("Only "+stock+" items available.","warning");
 
         return;
 
@@ -818,7 +1017,7 @@ function addToCart(productId, price, stock){
 
         success:function(response){
 
-            alert(response);
+        	showProductAlert(response,"success");
 
             $("#qty"+productId).val(1);
 
@@ -826,7 +1025,7 @@ function addToCart(productId, price, stock){
 
         error:function(){
 
-            alert("Unable To Add Product");
+        	showProductAlert("Unable to add product.","danger");
 
         }
 
@@ -890,7 +1089,6 @@ if(e.which==13){
 
 
 </script>
-
 </body>
 
 </html>

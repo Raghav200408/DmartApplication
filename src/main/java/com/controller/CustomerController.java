@@ -3,6 +3,7 @@ package com.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.HttpStatus;
@@ -23,20 +24,26 @@ public class CustomerController {
     // =============================
 
     @PostMapping
-    public String addCustomer(@RequestBody CustomerDTO customer) {
+    public ResponseEntity<String> addCustomer(@RequestBody CustomerDTO customer) {
+
+        CustomerDTO existing = service.searchByMobile(customer.getMobileNumber());
+
+        if (existing != null) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Mobile number already exists.");
+        }
 
         int result = service.addCustomer(customer);
 
         if (result > 0) {
-
-            return "Customer Registered Successfully";
-
+            return ResponseEntity.ok("Customer Registered Successfully");
         }
 
-        return "Customer Registration Failed";
-
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Registration Failed");
     }
-
     // =============================
     // GET ALL CUSTOMERS
     // =============================
@@ -108,19 +115,32 @@ public class CustomerController {
     // =============================
 
     @DeleteMapping("/{id}")
-    public String deleteCustomer(
-            @PathVariable("id") int id) {
+    public ResponseEntity<?> deleteCustomer(
+            @PathVariable("id") int id,
+            @RequestParam(name = "force", defaultValue = "false") boolean force) {
 
-        int result = service.deleteCustomer(id);
+        try {
 
-        if (result > 0) {
+            if(force){
 
-            return "Customer Deleted Successfully";
+                service.deleteCustomerAndBills(id);
+
+                return ResponseEntity.ok("Customer Deleted Successfully");
+
+            }
+
+            service.deleteCustomer(id);
+
+            return ResponseEntity.ok("Customer Deleted Successfully");
+
+        }
+        catch(DataIntegrityViolationException e){
+
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body("Purchase History Exists");
 
         }
 
-        return "Customer Delete Failed";
-
     }
-
 }

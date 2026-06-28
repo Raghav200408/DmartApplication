@@ -31,25 +31,18 @@ pageEncoding="UTF-8"%>
 
 <div class="row mb-3">
 
-<div class="col-md-6">
+<div class="col-md-12">
 
 <input type="text"
        id="search"
        class="form-control"
-       placeholder="Search Bill ID">
+       placeholder="Search Bill ID"
+       maxlength="10"
+       inputmode="numeric"
+       autocomplete="off">
 
 </div>
 
-<div class="col-md-2">
-
-<button class="btn btn-success"
-        onclick="searchBills()">
-
-Search
-
-</button>
-
-</div>
 
 </div>
 
@@ -94,6 +87,14 @@ Search
 $(document).ready(function(){
 
     loadBills();
+
+    $("#search").on("input", function () {
+
+        this.value = this.value.replace(/\D/g, "");
+
+        searchBills();
+
+    });
 
 });
 
@@ -175,27 +176,18 @@ function searchBills() {
 
     let billId = $("#search").val().trim();
 
-    if (billId == "") {
+    if (billId === "") {
 
-        loadBills();
+        $("#billTable tr").show();
 
         return;
-
     }
 
     $("#billTable tr").each(function () {
 
         let currentBillId = $(this).find("td:first").text().trim();
 
-        if (currentBillId === billId) {
-
-            $(this).show();
-
-        } else {
-
-            $(this).hide();
-
-        }
+        $(this).toggle(currentBillId.startsWith(billId));
 
     });
 

@@ -1,6 +1,9 @@
 package com.controller;
 
 import java.io.File;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -111,12 +114,29 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteProduct(
+    public ResponseEntity<String> deleteProduct(
             @PathVariable("id") int id) {
 
-        return service.deleteProduct(id) > 0
-                ? "Deleted Successfully"
-                : "Delete Failed";
+        try {
+
+            int result = service.deleteProduct(id);
+
+            if (result > 0) {
+                return ResponseEntity.ok("Product Deleted Successfully");
+            }
+
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Product Not Found");
+
+        }
+        catch (DataIntegrityViolationException e) {
+
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body("Cannot delete product because it is already used in billing.");
+
+        }
     }
 
     @GetMapping("/search/{id}")

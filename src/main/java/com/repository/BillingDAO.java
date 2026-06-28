@@ -84,12 +84,18 @@ public class BillingDAO {
     public int generateBill(int customerId, String paymentType) {
 
         // Calculate total amount
-        String totalSql = "SELECT COALESCE(SUM(total),0) FROM cart WHERE customer_id=?";
+    	String totalSql = "SELECT COALESCE(SUM(total),0) FROM cart WHERE customer_id=?";
 
-        Double totalAmount = jdbcTemplate.queryForObject(
-                totalSql,
-                Double.class,
-                customerId);
+    	Double subTotal = jdbcTemplate.queryForObject(
+    	        totalSql,
+    	        Double.class,
+    	        customerId);
+
+    	// Calculate GST (5%)
+    	Double gst = subTotal * 0.05;
+
+    	// Grand Total
+    	Double totalAmount = subTotal + gst;
 
         // Insert into bills table
         String insertBill = """

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.model.CustomerDTO;
 import com.repository.CustomerDAO;
@@ -71,6 +72,13 @@ public class CustomerService {
     public int deleteCustomer(int id) {
 
         return dao.deleteCustomer(id);
+
+    }
+
+    @Transactional
+    public void deleteCustomerAndBills(int customerId){
+
+        dao.deleteCustomerAndBills(customerId);
 
     }
 

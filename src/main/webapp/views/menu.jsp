@@ -13,7 +13,8 @@ if(session.getAttribute("username")==null){
 <title>Dashboard</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 
 html, body{
@@ -111,13 +112,25 @@ html, body{
 
 <hr class="text-white">
 
-<a href="home.jsp" target="contentFrame"> Dashboard </a>
-<a href="customer.jsp" target="contentFrame"> Customer Search </a>
+<a href="home.jsp" target="contentFrame">
+    <i class="fas fa-house me-2"></i> Dashboard
+</a>
 
-<a href="products.jsp" target="contentFrame"> Add Product </a>
+<a href="customer.jsp" target="contentFrame">
+    <i class="fas fa-users me-2"></i> Customer Search
+</a>
 
-<a href="billing.jsp" target="contentFrame"> Billing</a>
-<a href="viewbills.jsp" target="contentFrame">View Bills</a>
+<a href="products.jsp" target="contentFrame">
+    <i class="fas fa-box-open me-2"></i> Product Management
+</a>
+
+<a href="billing.jsp" target="contentFrame">
+    <i class="fas fa-cart-shopping me-2"></i> Billing
+</a>
+
+<a href="viewbills.jsp" target="contentFrame">
+    <i class="fas fa-file-invoice me-2"></i> View Bills
+</a>
 
 
 </div>

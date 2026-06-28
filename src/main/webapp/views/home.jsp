@@ -95,41 +95,55 @@ thead {
 }
 
 .product-card{
-
-    transition:.3s;
-
     border-radius:15px;
-
+    transition:.3s;
+    overflow:hidden;
+    border:1px solid #e9ecef;
 }
 
 .product-card:hover{
-
-    transform:translateY(-8px);
-
-    box-shadow:0 10px 20px rgba(0,0,0,.2);
-
+    transform:translateY(-5px);
+    box-shadow:0 8px 18px rgba(0,0,0,.12);
 }
 
 .product-card img{
-
-    height:180px;
-
+    height:130px;
+    width:100%;
     object-fit:contain;
+    background:#f8f9fa;
+    padding:12px;
+}
 
-    padding:10px;
-
+.product-card .card-body{
+    padding:15px;
 }
 
 .product-card h5{
-
-    font-weight:bold;
-
+    font-size:20px;
+    font-weight:600;
+    margin-bottom:5px;
 }
 
-.badge-stock{
+.product-card p{
+    margin-bottom:8px;
+    color:#6c757d;
+}
 
-    font-size:14px;
+.price{
+    color:#198754;
+    font-size:24px;
+    font-weight:bold;
+}
 
+.stock-badge{
+    font-size:13px;
+    padding:6px 12px;
+    border-radius:20px;
+}
+
+.card-footer{
+    background:#fff;
+    border-top:1px solid #eee;
 }
 </style>
 </head>
@@ -198,27 +212,28 @@ thead {
 				</div>
 			</div>
 		</div>
-		<div class="row mt-5">
+		<div class="table-card mt-5">
 
-    <div class="col-md-12">
+    <div class="card-header p-3 d-flex justify-content-between align-items-center">
 
-        <div class="d-flex justify-content-between align-items-center">
+        <h3>Latest Inventory</h3>
+          
+          
+        
 
-            <h4>
+        <a href="products.jsp"
+           class="btn btn-light btn-sm">
 
-                Recently Added Products
+          
+            Manage Inventory
 
-            </h4>
+        </a>
 
-            <a
-                href="products.jsp"
-                class="btn btn-primary">
+    </div>
 
-                View All Products
+    <div class="p-4">
 
-            </a>
-
-        </div>
+        <div class="row" id="latestProducts"></div>
 
     </div>
 
@@ -438,45 +453,61 @@ function renderLatestProducts(products){
 
     $.each(products, function(index, p){
 
-        cards += `
-        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+    	cards += `
 
-            <div class="card product-card shadow h-100">
+    		<div class="col-lg-3 col-md-4 col-sm-6 mb-4">
 
-                <img src="/DmartWebApp/images/${p.imagePath}"
-                     class="card-img-top"
-                     alt="${p.productName}">
+    		    <div class="card product-card h-100">
 
-                <div class="card-body">
+    		        <img src="/DmartWebApp/images/${p.imagePath}"
+    		             alt="${p.productName}">
 
-                    <h5>${p.productName}</h5>
+    		        <div class="card-body">
 
-                    <p class="text-muted">${p.category}</p>
+    		            <h5>${p.productName}</h5>
 
-                    <h4 class="text-success">₹ ${p.price}</h4>
+    		            <p>${p.category}</p>
 
-                    <span class="badge bg-primary">
-                        Stock : ${p.quantity}
-                    </span>
+    		            <div class="price">
+    		                ₹ ${p.price}
+    		            </div>
 
-                </div>
+    		            ${
+    		                p.quantity==0 ?
 
-                <div class="card-footer bg-white">
+    		                '<span class="badge bg-danger stock-badge">Out of Stock</span>'
 
-                    <button
-                        class="btn btn-outline-primary w-100"
-                        onclick="viewProduct(${p.productId})">
+    		                :
 
-                        View Product
+    		                p.quantity<=10 ?
 
-                    </button>
+    		                '<span class="badge bg-warning text-dark stock-badge">Low Stock : '+p.quantity+'</span>'
 
-                </div>
+    		                :
 
-            </div>
+    		                '<span class="badge bg-success stock-badge">In Stock : '+p.quantity+'</span>'
+    		            }
 
-        </div>
-        `;
+    		        </div>
+
+    		        <div class="card-footer">
+
+    		            <button
+    		                class="btn btn-outline-success w-100"
+    		                onclick="viewProduct(${p.productId})">
+
+    		                <i class="bi bi-eye"></i>
+    		                View Product
+
+    		            </button>
+
+    		        </div>
+
+    		    </div>
+
+    		</div>
+
+    		`;
 
     });
 

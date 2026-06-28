@@ -243,13 +243,6 @@ function loadInvoice(billId){
 
             renderItems(data.items);
 
-            // Automatically open print dialog
-            setTimeout(function(){
-
-                printInvoice();
-
-            },500);
-
         },
 
         error:function(){
@@ -292,9 +285,7 @@ function printInvoice() {
 
 window.onafterprint = function () {
 
-    alert(" Bill Printed Successfully");
-
-    window.location.href = "customer.jsp";
+    // Do nothing after printing
 
 };
 

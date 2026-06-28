@@ -266,11 +266,108 @@ Generate Bill
 
 </div>
 
+<!-- Edit Quantity Modal -->
+<div class="modal fade" id="editCartModal" tabindex="-1">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-warning">
+
+                <h5 class="modal-title">Edit Quantity</h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <input type="hidden" id="editCartId">
+
+                <input type="hidden" id="editPrice">
+
+                <label>Quantity</label>
+
+                <input
+                    type="number"
+                    id="editQuantity"
+                    class="form-control"
+                    min="1">
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-success"
+                    id="updateCartBtn">
+
+                    Update
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- Delete Cart Modal -->
+<div class="modal fade" id="deleteCartModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Delete Cart Item</h5>
+
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                Are you sure you want to remove this product?
+            </div>
+
+            <div class="modal-footer">
+
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button class="btn btn-danger"
+                        id="confirmDeleteCart">
+                    Delete
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 
 <script
 src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+let deleteCartId = 0;
 
 $(document).ready(function(){
 
@@ -410,92 +507,105 @@ $("#grandTotal").text("₹ " + grandTotal.toFixed(2));
 EDIT CART
 =====================================*/
 
+
 function editCart(cartId, price, oldQty){
 
-let quantity = prompt("Enter New Quantity", oldQty);
+    $("#editCartId").val(cartId);
 
-if(quantity == null){
+    $("#editPrice").val(price);
 
-return;
+    $("#editQuantity").val(oldQty);
 
-}
-
-quantity = parseInt(quantity);
-
-if(isNaN(quantity) || quantity <= 0){
-
-alert("Invalid Quantity");
-
-return;
+    new bootstrap.Modal(
+        document.getElementById("editCartModal")
+    ).show();
 
 }
+$("#updateCartBtn").click(function(){
 
-$.ajax({
+    let cartId = $("#editCartId").val();
 
-url:"/DmartWebApp/api/cart/"+cartId,
+    let price = $("#editPrice").val();
 
-type:"PUT",
+    let quantity = $("#editQuantity").val();
 
-contentType:"application/json",
+    $.ajax({
 
-data:JSON.stringify({
+        url:"/DmartWebApp/api/cart/"+cartId,
 
-    price:price,
+        type:"PUT",
 
-    quantity:quantity
+        contentType:"application/json",
 
-}),
+        data:JSON.stringify({
 
-success:function(response){
+            price:price,
 
-    alert(response);
+            quantity:quantity
 
-    loadCart();
+        }),
 
-},
+        success:function(response){
 
-error:function(){
+            bootstrap.Modal
+                .getInstance(document.getElementById("editCartModal"))
+                .hide();
 
-    alert("Unable To Update Cart");
+            loadCart();
 
-}
+            // Optional:
+            showAlert(response,"success");
+
+        },
+
+        error:function(){
+
+            alert("Unable To Update Cart");
+
+        }
+
+    });
 
 });
-
-}
 /*====================================
 DELETE CART ITEM
 =====================================*/
 
 function deleteCart(cartId){
 
-if(confirm("Remove Product From Cart?")){
+    deleteCartId = cartId;
 
-$.ajax({
+    new bootstrap.Modal(
+        document.getElementById("deleteCartModal")
+    ).show();
 
-    url:"/DmartWebApp/api/cart/"+cartId,
+}
+$(document).on("click", "#confirmDeleteCart", function () {
 
-    type:"DELETE",
+    $.ajax({
 
-    success:function(response){
+        url:"/DmartWebApp/api/cart/" + deleteCartId,
+        type:"DELETE",
 
-        alert(response);
+        success:function(){
 
-        loadCart();
+            bootstrap.Modal
+                .getInstance(document.getElementById("deleteCartModal"))
+                .hide();
 
-    },
+            loadCart();
 
-    error:function(){
+        },
 
-        alert("Delete Failed");
+        error:function(){
 
-    }
+            alert("Delete Failed");
+
+        }
+
+    });
 
 });
-
-}
-
-}
 /*====================================
 CONTINUE SHOPPING
 =====================================*/

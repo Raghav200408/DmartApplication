@@ -64,6 +64,11 @@
                         </div>
 
                     </form>
+                    
+                    <div id="loginAlert"
+     class="alert d-none mt-3"
+     role="alert">
+</div>
 
                 </div>
 
@@ -83,6 +88,20 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script>
+function showAlert(message, type){
+
+    $("#loginAlert")
+        .removeClass("d-none alert-success alert-danger alert-warning")
+        .addClass("alert-" + type)
+        .html(message);
+
+    setTimeout(function(){
+
+        $("#loginAlert").addClass("d-none");
+
+    },3000);
+
+}
 
 function loginUser() {
 
@@ -98,22 +117,35 @@ function loginUser() {
         contentType : "application/json",
         data : JSON.stringify(loginData),
 
-        success : function(response) {
+        success : function(response){
 
-            if(response === "SUCCESS") {
-                window.location.href = "views/menu.jsp";
-            } else {
-                alert("Invalid Username or Password");
+            if(response === "SUCCESS"){
+
+                showAlert("Login Successful!", "success");
+
+                setTimeout(function(){
+
+                    window.location.href = "views/menu.jsp";
+
+                },800);
+
+            }else{
+
+                showAlert("Invalid Username or Password", "danger");
+
             }
+
         },
 
-        error : function(xhr) {
+        error : function(xhr){
 
             console.log("Status : " + xhr.status);
             console.log("Response : " + xhr.responseText);
 
-            alert("Error : " + xhr.status);
+            showAlert("Unable to connect to server.", "warning");
+
         }
+
     });
 }
 

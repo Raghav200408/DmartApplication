@@ -232,6 +232,10 @@ No Products
     </p>
 
 </div>
+<div id="billAlert"
+     class="alert d-none mt-3"
+     role="alert">
+</div>
 
 <div class="text-end mt-3">
 
@@ -251,6 +255,20 @@ No Products
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script>
+function showBillAlert(message, type){
+
+    $("#billAlert")
+        .removeClass("d-none alert-success alert-danger alert-warning alert-info")
+        .addClass("alert-" + type)
+        .text(message);
+
+    setTimeout(function(){
+
+        $("#billAlert").addClass("d-none");
+
+    },3000);
+
+}
 
 $(document).ready(function () {
 
@@ -286,7 +304,7 @@ function loadBill(customerId){
 
         error : function(){
 
-            alert("Unable to load billing details.");
+        	showBillAlert("Unable to load billing details.","danger");
 
         }
 
@@ -340,7 +358,7 @@ $("#generateBill").click(function(){
 
         error:function(xhr){
 
-            alert(xhr.responseText);
+        	showBillAlert(xhr.responseText,"warning");
 
         }
 
