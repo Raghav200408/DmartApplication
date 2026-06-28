@@ -335,7 +335,7 @@ http://localhost:8080/DmartWebApp
 
 ---
 
-# 📈 Future Enhancements
+# Future Enhancements
 
 * Enhanced Dashboard Analytics
 * Monthly Sales Report
