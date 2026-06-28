@@ -159,7 +159,7 @@ Managing retail stores manually can lead to billing errors, stock mismatches, an
 
 ---
 
-# 📂 Project Structure
+#  Project Structure
 
 ```text
 DmartWebApp
