@@ -1,147 +1,186 @@
-# DMart Billing and Inventory Management System
+# Dmart Billing & Inventory Management System
 
-## Project Overview
-
-DMart Billing and Inventory Management System is a web-based retail management application developed using Spring MVC, PostgreSQL, Bootstrap, AJAX, and Maven.
-
-The system helps cashiers manage products, customers, billing operations, payments, and billing history while maintaining inventory records efficiently.
+A modern **Billing & Inventory Management System** developed using **Java, Spring MVC, JSP, PostgreSQL, Bootstrap, AJAX, and jQuery**. This application helps retail stores efficiently manage products, customers, inventory, billing, invoices, and sales with an intuitive web interface.
 
 ---
 
-## Features
+##  Project Overview
 
-### Cashier Login
+Managing retail stores manually can lead to billing errors, stock mismatches, and poor customer management. This project automates the complete retail billing process by providing a centralized platform for product management, customer management, billing, inventory tracking, and invoice generation.
 
-* Secure cashier authentication
-* AJAX-based login validation
-* Redirect to dashboard after successful login
+---
 
-### Dashboard
+##  Features
 
-* Total Products
-* Total Customers
-* Total Bills
-* Today's Sales
-* Revenue Summary
-* Recently Sold Products
+###  Authentication
 
-### Product Management
+* Secure Cashier Login
+* Session Management
+* Logout Functionality
 
-* Add Product
-* View Products
-* Search Product by Product ID
-* Update Product
-* Delete Product
+---
 
-### Customer Management
+###  Customer Management
 
-* Search Customer
-* View Customers
-* Update Customer Details
+* Search Customer by Mobile Number
+* Register New Customer
+* Automatic Customer Selection for Billing
 * Customer Purchase History
 
-### Billing Module
+---
 
-* Search Customer using Mobile Number
-* Register Customer if not found
+###  Product Management
+
+* Add New Product
+* Update Existing Product
+* Delete Product
 * Search Product by Product ID
-* Add Product to Cart
-* Update Product Quantity
-* Remove Product from Cart
-* Calculate GST
-* Generate Bill
-
-### Payment Module
-
-* Cash Payment
-* QR Payment
-
-### Receipt Generation
-
-* Generate Receipt
-* Print Receipt
-
-### Billing History
-
-* Search Bills
-* View Previous Bills
-* Print Previous Bills
+* Upload Product Images
+* Low Stock Indicator
+* Product Availability Status
+* Expiry Date Management
+* Bootstrap Success/Error Alerts
+* Delete Confirmation Modal
 
 ---
 
-## Technology Stack
+###  Cart Management
 
-### Frontend
+* Add Products to Cart
+* Update Product Quantity
+* Remove Products from Cart
+* Automatic Cart Total Calculation
 
+---
+
+###  Billing Module
+
+* Generate Customer Bill
+* Automatic GST (5%) Calculation
+* Grand Total Calculation
+* Cash Payment
+* UPI Payment
+* Automatic Bill Generation
+* Automatic Stock Deduction After Billing
+* Clear Cart After Successful Billing
+
+---
+
+###  Invoice Module
+
+* Professional Invoice Layout
+* Customer Details
+* Purchased Product List
+* Subtotal
+* GST Amount
+* Grand Total
+* Payment Type
+* Invoice Date & Time
+
+---
+
+###  View Bills
+
+* View Complete Billing History
+* Search Bills by Bill ID
+* View Invoice
+* Amount Displayed Including GST
+
+---
+
+###  Inventory Management
+
+* Automatic Stock Reduction
+* Low Stock Warning
+* Expiry Date Tracking
+* Product Availability Status
+
+---
+
+##  Project Architecture
+
+```text
+                 Presentation Layer
+        (JSP • HTML • CSS • Bootstrap • jQuery)
+
+                         │
+                         ▼
+
+                  Spring MVC Controllers
+
+                         │
+                         ▼
+
+                    Service Layer
+
+                         │
+                         ▼
+
+               Repository (Spring JDBC)
+
+                         │
+                         ▼
+
+                    PostgreSQL Database
+```
+
+---
+
+#  Technology Stack
+
+## Backend
+
+* Java 21
+* Spring Framework (Spring MVC)
+* Spring JDBC
+* Maven
+
+## Frontend
+
+* JSP
 * HTML5
+* CSS3
 * Bootstrap 5
 * JavaScript
 * jQuery
 * AJAX
 
-### Backend
-
-* Spring MVC
-* Spring REST Controller
-* Spring JDBC (JdbcTemplate)
-
-### Database
+## Database
 
 * PostgreSQL
 
-### Server
+## Server
 
 * Apache Tomcat 11
 
-### Build Tool
+## IDE
 
-* Maven
-
----
-
-## System Architecture
-
-```text
-HTML + Bootstrap + jQuery
-            |
-            V
-        AJAX Calls
-            |
-            V
-Spring MVC REST Controller
-            |
-            V
-      Service Layer
-            |
-            V
-         DAO Layer
-      (JdbcTemplate)
-            |
-            V
-       PostgreSQL
-```
+* Eclipse IDE
 
 ---
 
-## Project Structure
+# 📂 Project Structure
 
 ```text
 DmartWebApp
 │
-├── src/main/java
-│   ├── com.configuration
-│   ├── com.controller
-│   ├── com.service
-│   ├── com.repository
-│   └── com.model
+├── src
+│   ├── controller
+│   ├── service
+│   ├── repository
+│   ├── model
+│   └── configuration
+│
+├── src/main/resources
 │
 ├── src/main/webapp
-│   ├── index.jsp
 │   ├── views
+│   ├── css
+│   ├── js
 │   └── WEB-INF
 │
 ├── Database
-│   └── DmartDB.sql
+│   └── DMART_DATABASE.sql
 │
 ├── pom.xml
 │
@@ -150,104 +189,124 @@ DmartWebApp
 
 ---
 
-## Database Tables
+#  Database Design
 
-### cashier
+## Tables
 
-```sql
-username
-password
-```
+* Cashier
+* Customers
+* Product
+* Cart
+* Bills
+* Bill Items
 
-### customers
+## Relationships
 
-```sql
-customer_id
-customer_name
-mobile_number
-```
-
-### products
-
-```sql
-product_id
-product_name
-category
-quantity
-price
-gst
-```
-
-### bills
-
-```sql
-bill_id
-customer_id
-bill_date
-total_amount
-payment_type
-```
-
-### bill_items
-
-```sql
-bill_item_id
-bill_id
-product_id
-quantity
-price
-gst
+```text
+Customers
+   │
+   ├──────────────► Cart ◄────────────── Product
+   │
+   ▼
+ Bills
+   │
+   ▼
+Bill Items
+   ▲
+   │
+Product
 ```
 
 ---
 
-## Installation
-
-### Clone Repository
-
-```bash
-git clone <repository-url>
-```
-
-### Import Project
-
-1. Open Eclipse
-2. Import Existing Maven Project
-3. Select Project Directory
-4. Update Maven Dependencies
-
-### Configure Database
-
-1. Install PostgreSQL
-2. Create Database:
-
-```sql
-CREATE DATABASE DmartDB;
-```
-
-3. Execute:
+#  Application Flow
 
 ```text
-Database/DmartDB.sql
+Cashier Login
+       │
+       ▼
+Dashboard
+       │
+       ▼
+Search Customer
+       │
+       ├── Existing Customer
+       │
+       └── Register New Customer
+       │
+       ▼
+Search Products
+       │
+       ▼
+Add Products to Cart
+       │
+       ▼
+Generate Bill
+       │
+       ▼
+Invoice Generation
+       │
+       ▼
+Update Inventory
+       │
+       ▼
+View Bills
 ```
 
-### Configure Database Connection
+---
 
-Update AppConfig.java:
+
+---
+
+#  Installation
+
+## Clone Repository
+
+```bash
+git clone https://github.com/charanvamshi91/DmartWebApp.git
+```
+
+---
+
+## Import Project
+
+* Eclipse IDE
+* Existing Maven Project
+
+---
+
+## Configure Database
+
+Create PostgreSQL Database
+
+```text
+Dmart_Database
+```
+
+Execute
+
+```text
+Database/DMART_DATABASE.sql
+```
+
+---
+
+## Configure Database Connection
+
+Update
 
 ```java
-ds.setUrl("jdbc:postgresql://localhost:5432/DmartDB");
-ds.setUsername("postgres");
-ds.setPassword("your_password");
+AppConfig.java
 ```
 
-### Run Application
+with your PostgreSQL credentials.
 
-1. Configure Apache Tomcat 11
-2. Deploy Project
-3. Start Server
+---
 
-Open:
+## Run Project
+
+* Apache Tomcat 11
+* Open
 
 ```text
 http://localhost:8080/DmartWebApp
@@ -255,19 +314,39 @@ http://localhost:8080/DmartWebApp
 
 ---
 
-## Future Enhancements
+#  Key Features
 
-* Sales Reports
-* Revenue Reports
-* Product-wise Sales Analysis
-* PDF Receipt Generation
-* Email Receipt
-* Inventory Alerts
-* Multi-Cashier Support
-* Barcode Scanner Integration
+* Responsive Bootstrap UI
+* MVC Architecture
+* Layered Design
+* Spring JDBC
+* PostgreSQL Integration
+* AJAX CRUD Operations
+* Product Image Upload
+* Dynamic Search
+* Session Management
+* Bootstrap Alerts
+* Delete Confirmation Modal
+* Automatic GST Calculation
+* Invoice Generation
+* Inventory Tracking
+* Sales History
+* PDF Invoice Download
 
 ---
 
-## License
+# 📈 Future Enhancements
 
-This project is developed for learning and educational purposes.
+* Enhanced Dashboard Analytics
+* Monthly Sales Report
+* Barcode Scanner Integration
+* Email Invoice
+* Product Categories
+* Admin Dashboard
+* Role Based Authentication
+* Enhanced Sales Charts
+* Export Reports (Excel/PDF)
+
+---
+
+## ⭐ If you found this project helpful, don't forget to give it a Star on GitHub!
