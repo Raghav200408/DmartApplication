@@ -149,7 +149,7 @@ public class ProductController {
     }
     @PutMapping(value = "/{id}", consumes = "multipart/form-data")
     public String updateProduct(
-    		    @PathVariable int id,
+    		  @PathVariable("id") int id,
     	        @RequestPart("product") ProductDTO p,
     	        @RequestPart(value = "image", required = false) MultipartFile image) {
 
