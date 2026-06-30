@@ -27,33 +27,19 @@ public class ProductController {
 	            LogManager.getLogger(ProductController.class);
     @Autowired
     private ProductService service;
+  
 
     @PostMapping(consumes = "multipart/form-data")
     public String addProduct(
 
-        @RequestParam("productName") String productName,
+    		 @RequestPart("product") ProductDTO p,
+    	     @RequestPart("image") MultipartFile image) {
 
-        @RequestParam("category") String category,
-
-        @RequestParam("price") double price,
-
-        @RequestParam("quantity") int quantity,
-
-        @RequestParam("manufacturerName") String manufacturerName,
-
-        @RequestParam("manufactureDate") String manufactureDate,
-
-        @RequestParam("expiryDate") String expiryDate,
-
-        @RequestParam("createdBy") int createdBy,
-
-        @RequestParam("image") MultipartFile image
-    ) {   logger.info("Add Product request received.");
+        logger.info("Add Product request received.");
 
         try {
 
-            String uploadDir =
-                    "C:/DmartUploads/";
+            String uploadDir = "C:/DmartUploads/";
 
             File dir = new File(uploadDir);
 
@@ -62,47 +48,27 @@ public class ProductController {
             }
 
             String fileName =
-                    UUID.randomUUID()
-                    + "_"
-                    + image.getOriginalFilename();
+                    UUID.randomUUID() + "_" + image.getOriginalFilename();
 
-            Path path =
-                    Paths.get(uploadDir + fileName);
+            Path path = Paths.get(uploadDir + fileName);
 
             Files.write(path, image.getBytes());
 
-            ProductDTO p =
-                    new ProductDTO();
-
-            p.setProductName(productName);
-            p.setCategory(category);
-            p.setPrice(price);
-            p.setQuantity(quantity);
-            p.setManufacturerName(manufacturerName);
-
-            p.setManufactureDate(
-                    LocalDate.parse(manufactureDate));
-
-            p.setExpiryDate(
-                    LocalDate.parse(expiryDate));
-
             p.setImagePath(fileName);
 
-            p.setCreatedBy(createdBy);
-            p.setUpdatedBy(createdBy);
-
             service.addProduct(p);
-            logger.debug("Product added successfully. Name={}, Category={}, CreatedBy={}",
-                    productName,
-                    category,
-                    createdBy);
+
+            logger.info(
+                    "Product added successfully. Name={}, Category={}, CreatedBy={}",
+                    p.getProductName(),
+                    p.getCategory(),
+                    p.getCreatedBy());
 
             return "Product Added Successfully";
 
         } catch (Exception e) {
-        	  logger.error("Failed to add product.", e);
 
-            e.printStackTrace();
+            logger.error("Failed to add product.", e);
 
             return "Failed";
         }
@@ -111,16 +77,30 @@ public class ProductController {
     @GetMapping
     public List<ProductDTO> getAllProducts() {
 
-        return service.getAllProducts();
+        logger.info("Fetching all products.");
+
+        List<ProductDTO> products = service.getAllProducts();
+
+        logger.info("Fetched {} products.", products.size());
+
+        return products;
     }
 
     @GetMapping("/{id}")
-    public ProductDTO getProductById(
-            @PathVariable("id") int id) {
+    public ProductDTO getProductById(@PathVariable("id") int id) {
 
-        return service.getProductById(id);
+        logger.info("Fetching product. ProductId={}", id);
+
+        ProductDTO product = service.getProductById(id);
+
+        if (product != null) {
+            logger.info("Product found. ProductId={}", id);
+        } else {
+            logger.warn("Product not found. ProductId={}", id);
+        }
+
+        return product;
     }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProduct(
             @PathVariable("id") int id) {
@@ -140,123 +120,86 @@ public class ProductController {
 
         }
         catch (DataIntegrityViolationException e) {
-            
+
+            logger.error(
+                    "Cannot delete product. ProductId={} is used in billing.",
+                    id,
+                    e);
+
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
                     .body("Cannot delete product because it is already used in billing.");
-
         }
     }
 
     @GetMapping("/search/{id}")
-    public ProductDTO searchProductById(
-            @PathVariable("id") int id) {
+    public ProductDTO searchProductById(@PathVariable("id") int id) {
 
-        return service.searchProductById(id);
+        logger.info("Searching product. ProductId={}", id);
+
+        ProductDTO product = service.searchProductById(id);
+
+        if (product != null) {
+            logger.info("Search successful. ProductId={}", id);
+        } else {
+            logger.warn("Search failed. Product not found. ProductId={}", id);
+        }
+
+        return product;
     }
-    @PutMapping(value="/{id}", consumes="multipart/form-data")
+    @PutMapping(value = "/{id}", consumes = "multipart/form-data")
     public String updateProduct(
+    		    @PathVariable int id,
+    	        @RequestPart("product") ProductDTO p,
+    	        @RequestPart(value = "image", required = false) MultipartFile image) {
 
-            @PathVariable("id") int id,
+        logger.info("Update Product request received. ProductId={}", id);
 
-            @RequestParam("productName") String productName,
+        try {
 
-            @RequestParam("category") String category,
+            ProductDTO oldProduct = service.getProductById(id);
 
-            @RequestParam("price") double price,
-
-            @RequestParam("quantity") int quantity,
-
-            @RequestParam("manufacturerName") String manufacturerName,
-
-            @RequestParam("manufactureDate") String manufactureDate,
-
-            @RequestParam("expiryDate") String expiryDate,
-
-            @RequestParam("createdBy") int createdBy,
-
-            @RequestParam(value="image",required=false)
-            MultipartFile image){
-
-        try{
-
-            ProductDTO oldProduct =
-                    service.getProductById(id);
-
-            String fileName =
-                    oldProduct.getImagePath();
-
-            if(image!=null && !image.isEmpty()){
-
-                String uploadDir="C:/DmartUploads/";
-
-                File dir=new File(uploadDir);
-
-                if(!dir.exists()){
-
-                    dir.mkdirs();
-
-                }
-
-                fileName=
-
-                        UUID.randomUUID()
-
-                        +"_"
-
-                        +image.getOriginalFilename();
-
-                Path path=
-
-                        Paths.get(uploadDir+fileName);
-
-                Files.write(path,image.getBytes());
-
+            if (oldProduct == null) {
+                logger.warn("Update failed. Product not found. ProductId={}", id);
+                return "Product Not Found";
             }
 
-            ProductDTO p=new ProductDTO();
+            String fileName = oldProduct.getImagePath();
+
+            if (image != null && !image.isEmpty()) {
+
+                String uploadDir = "C:/DmartUploads/";
+
+                File dir = new File(uploadDir);
+
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+
+                fileName = UUID.randomUUID() + "_" + image.getOriginalFilename();
+
+                Path path = Paths.get(uploadDir + fileName);
+
+                Files.write(path, image.getBytes());
+            }
 
             p.setProductId(id);
-
-            p.setProductName(productName);
-
-            p.setCategory(category);
-
-            p.setPrice(price);
-
-            p.setQuantity(quantity);
-
-            p.setManufacturerName(manufacturerName);
-
-            p.setManufactureDate(
-
-                    LocalDate.parse(manufactureDate));
-
-            p.setExpiryDate(
-
-                    LocalDate.parse(expiryDate));
-
             p.setImagePath(fileName);
 
-            p.setUpdatedBy(createdBy);
-
             service.updateProduct(p);
-            logger.info("Product updated successfully. ProductId={}, UpdatedBy={}",
+
+            logger.info(
+                    "Product updated successfully. ProductId={}, UpdatedBy={}",
                     id,
-                    createdBy);
+                    p.getUpdatedBy());
 
             return "Product Updated Successfully";
 
-        }
+        } catch (Exception e) {
 
-        catch(Exception e){
-        	logger.error("Failed to update product {}", id, e);
-
-            e.printStackTrace();
+            logger.error("Failed to update product. ProductId={}", id, e);
 
             return "Update Failed";
-
         }
-
     }
 }

@@ -65,6 +65,7 @@ body{
                     <input type="text"
                            id="productName"
                            class="form-control"
+                           name="productName"
                            required>
                 </div>
 
@@ -72,20 +73,24 @@ body{
                     <label class="form-label">Category</label>
                     <input type="text"
                            id="category"
+                           name="category"
                            class="form-control">
                 </div>
 
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Price</label>
                     <input type="number"
-                           id="price"
-                           class="form-control">
+       id="price"
+       name="price"
+       class="form-control">
+
                 </div>
 
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Quantity</label>
                     <input type="number"
                            id="quantity"
+                            name="quantity"
                            class="form-control">
                 </div>
 
@@ -93,6 +98,7 @@ body{
                     <label class="form-label">Manufacturer Name</label>
                     <input type="text"
                            id="manufacturerName"
+                           name="manufacturerName"
                            class="form-control">
                 </div>
 
@@ -100,6 +106,7 @@ body{
                     <label class="form-label">Product Image</label>
                     <input type="file"
                            id="image"
+                            name="image"
                            class="form-control">
                 </div>
 
@@ -107,6 +114,7 @@ body{
                     <label class="form-label">Manufacture Date</label>
                     <input type="date"
                            id="manufactureDate"
+                              name="manufactureDate"
                            class="form-control">
                 </div>
 
@@ -114,6 +122,7 @@ body{
                     <label class="form-label">Expiry Date</label>
                     <input type="date"
                            id="expiryDate"
+                            name="expiryDate"
                            class="form-control">
                 </div>
 
@@ -121,6 +130,7 @@ body{
                     <label class="form-label">Created By</label>
                     <input type="number"
                            id="createdBy"
+                              name="createdBy"
                            class="form-control">
                 </div>
 
@@ -243,61 +253,61 @@ $("#productForm").submit(function(e){
 
     e.preventDefault();
 
-    let formData=new FormData();
+    let id = $("#productId").val();
 
-    formData.append("productName",$("#productName").val());
+    let product = {
 
-    formData.append("category",$("#category").val());
+        productName: $("#productName").val(),
+        category: $("#category").val(),
+        price: parseFloat($("#price").val()),
+        quantity: parseInt($("#quantity").val()),
+        manufacturerName: $("#manufacturerName").val(),
+        manufactureDate: $("#manufactureDate").val(),
+        expiryDate: $("#expiryDate").val(),
+        createdBy: parseInt($("#createdBy").val()),
+        updatedBy: parseInt($("#createdBy").val())
+    };
 
-    formData.append("price",$("#price").val());
+    let formData = new FormData();
 
-    formData.append("quantity",$("#quantity").val());
+    formData.append(
+        "product",
+        new Blob(
+            [JSON.stringify(product)],
+            { type: "application/json" }
+        )
+    );
 
-    formData.append("manufacturerName",$("#manufacturerName").val());
-
-    formData.append("manufactureDate",$("#manufactureDate").val());
-
-    formData.append("expiryDate",$("#expiryDate").val());
-
-    formData.append("createdBy",$("#createdBy").val());
-
-    if($("#image")[0].files.length>0){
-
-        formData.append("image",
-
-                $("#image")[0].files[0]);
-
+    if($("#image")[0].files.length > 0){
+        formData.append(
+            "image",
+            $("#image")[0].files[0]
+        );
     }
 
-    let id=$("#productId").val();
+    let url = "/DmartWebApp/api/products";
+    let method = "POST";
 
-    let url="/DmartWebApp/api/products";
-
-    let method="POST";
-
-    if(id!=""){
-
-        url="/DmartWebApp/api/products/"+id;
-
-        method="PUT";
-
+    if(id != ""){
+        url = "/DmartWebApp/api/products/" + id;
+        method = "PUT";
     }
 
     $.ajax({
 
-        url:url,
+        url: url,
 
-        type:method,
+        type: method,
 
-        data:formData,
+        data: formData,
 
-        processData:false,
+        processData: false,
 
-        contentType:false,
+        contentType: false,
 
         success:function(response){
 
-        	showProductAlert(response, "success");
+            showProductAlert(response, "success");
 
             $("#productForm")[0].reset();
 
@@ -307,17 +317,16 @@ $("#productForm").submit(function(e){
 
         },
 
-        error:function(){
+        error:function(xhr){
+
+            console.log(xhr.responseText);
 
             showProductAlert("Operation Failed.", "danger");
-
         }
 
     });
 
 });
-
-
 /* ===========================
    LOAD PRODUCTS
 =========================== */
