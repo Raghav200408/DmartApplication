@@ -1,31 +1,58 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Dmart Product Management</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-      rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script
+	src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 
+<script
+	src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+<script
+	src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+<script
+	src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 <style>
-
-body{
-    background-color:#f4f6f9;
+body {
+	background-color: #f4f6f9;
 }
 
-.card{
-    border:none;
+.card {
+	border: none;
+	border-radius: 15px;
 }
 
-.table img{
-    border-radius:8px;
+.card-header {
+	font-weight: bold;
 }
 
+.table img {
+	object-fit: cover;
+}
+
+.table td {
+	vertical-align: middle;
+}
+
+.btn {
+	border-radius: 8px;
+}
 </style>
 
 </head>
@@ -35,227 +62,331 @@ body{
 
 
 
-<div class="container mt-4">
+	<div class="container mt-4">
 
-    <!-- PRODUCT FORM -->
+		<!-- PRODUCT FORM -->
 
-    <!-- PRODUCT FORM -->
+		<!-- PRODUCT FORM -->
 
-<div class="card shadow">
 
-    <div class="card-header bg-success text-white">
-        <h4>Add Product</h4>
-    </div>
+		<!-- SEARCH -->
 
-    <div class="card-body">
-
-        <div id="productAlert"
-             class="alert d-none mb-3"
-             role="alert">
-        </div>
-
-        <form id="productForm" enctype="multipart/form-data">
-
-            <input type="hidden" id="productId">
-
-            <div class="row">
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Product Name</label>
-                    <input type="text"
-                           id="productName"
-                           class="form-control"
-                           name="productName"
-                           required>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Category</label>
-                    <input type="text"
-                           id="category"
-                           name="category"
-                           class="form-control">
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Price</label>
-                    <input type="number"
-       id="price"
-       name="price"
-       class="form-control">
-
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Quantity</label>
-                    <input type="number"
-                           id="quantity"
-                            name="quantity"
-                           class="form-control">
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Manufacturer Name</label>
-                    <input type="text"
-                           id="manufacturerName"
-                           name="manufacturerName"
-                           class="form-control">
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Product Image</label>
-                    <input type="file"
-                           id="image"
-                            name="image"
-                           class="form-control">
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Manufacture Date</label>
-                    <input type="date"
-                           id="manufactureDate"
-                              name="manufactureDate"
-                           class="form-control">
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Expiry Date</label>
-                    <input type="date"
-                           id="expiryDate"
-                            name="expiryDate"
-                           class="form-control">
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Created By</label>
-                    <input type="number"
-                           id="createdBy"
-                              name="createdBy"
-                           class="form-control">
-                </div>
-
-            </div>
-
-            <button type="submit"
-                    class="btn btn-success">
-                Save Product
-            </button>
-
-            <button type="reset"
-                    class="btn btn-secondary">
-                Clear
-            </button>
-
-        </form>
-
-    </div>
-
+		<!-- SEARCH PRODUCT -->
+		<div id="productAlert"
+     class="alert d-none mt-3">
 </div>
 
-    <!-- SEARCH -->
+		<div class="card shadow mb-4">
 
-    <div class="card shadow mt-4">
+			<div class="card-header bg-success text-white">
 
-        <div class="card-body">
+				<h5 class="mb-0">
+					<i class="bi bi-search"></i> Search Product
+				</h5>
 
-            <div class="row">
+			</div>
 
-                <div class="col-md-4">
-               <input type="number"
-                 id="searchBox"
-                  class="form-control"
-                   placeholder="Enter Product ID">
-                </div>
+			<div class="card-body">
 
-            </div>
+				<div class="row g-2">
 
-        </div>
+					<div class="col-md-10">
 
-    </div>
+						<input type="number" id="searchBox" class="form-control"
+							placeholder="Enter Product ID">
 
-    <!-- PRODUCT TABLE -->
+					</div>
 
-    <div class="card shadow mt-4">
+					<div class="col-md-2">
 
-        <div class="card-header bg-dark text-white">
+						<button class="btn btn-success w-100"
+							onclick="searchProducts($('#searchBox').val())">Search</button>
 
-            <h4>Product List</h4>
+					</div>
 
-        </div>
+				</div>
 
-        <div class="card-body">
+			</div>
 
-            <table
-              class="table table-bordered table-hover table-striped"
-              id="productTable">
+		</div>
 
-                <thead class="table-primary">
+		<!-- PRODUCT TABLE -->
 
-                <tr>
+		<div class="card shadow mt-4">
 
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Qty</th>
-                    <th>Manufacturer</th>
-                    <th>MFG Date</th>
-                    <th>EXP Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+			<div
+				class="card-header bg-success text-white d-flex justify-content-between align-items-center">
 
-                </tr>
+				<h5 class="mb-0">
+					<i class="bi bi-box-seam"></i> View Products
+				</h5>
 
-                </thead>
+				<button class="btn btn-outline-light" data-bs-toggle="modal"
+					data-bs-target="#productModal" onclick="clearForm()">
 
-                <tbody>
+					<i class="bi bi-plus-circle"></i> Add Product
 
-                </tbody>
+				</button>
 
-            </table>
+			</div>
 
-        </div>
+			<div class="card-body">
 
-    </div>
+				<div class="table-responsive">
 
-</div>
+					<table id="productTable"
+						class="table table-hover table-bordered align-middle">
 
-<script>
+						<thead class="bg-success text-white">
+
+							<tr>
+
+								<th>ID</th>
+
+								
+
+								<th>Product</th>
+
+								<th>Category</th>
+
+								<th>Price</th>
+
+								<th>Quantity</th>
+
+								<th>Manufacturer</th>
+
+								<th>Expiry</th>
+
+								<th>Status</th>
+
+								<th>Actions</th>
+
+							</tr>
+
+						</thead>
+
+						<tbody>
+
+						</tbody>
+
+					</table>
+
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+	<div class="modal fade" id="productModal" tabindex="-1"
+		aria-hidden="true">
+
+		<div class="modal-dialog modal-lg modal-dialog-scrollable">
+
+			<div class="modal-content">
+
+				<div class="modal-header bg-success text-white">
+
+					<h5 class="modal-title" id="productModalTitle">Add Product</h5>
+
+					<button type="button" class="btn-close btn-close-white"
+						data-bs-dismiss="modal"></button>
+
+				</div>
+
+				<div class="modal-body">
+
+					<!-- Product Form Starts -->
+
+					<form id="productForm" enctype="multipart/form-data">
+
+						<input type="hidden" id="productId">
+
+						<div class="row">
+
+							<div class="col-md-6 mb-3">
+
+								<label class="form-label"> Product Name </label> <input
+									type="text" id="productName" class="form-control" required>
+
+							</div>
+
+							<div class="col-md-6 mb-3">
+
+								<label class="form-label"> Category </label> <input type="text"
+									id="category" class="form-control">
+
+							</div>
+
+							<div class="col-md-6 mb-3">
+
+								<label class="form-label"> Price </label> <input type="number"
+									id="price" class="form-control">
+
+							</div>
+
+							<div class="col-md-6 mb-3">
+
+								<label class="form-label"> Quantity </label> <input
+									type="number" id="quantity" class="form-control">
+
+							</div>
+
+							<div class="col-md-6 mb-3">
+
+								<label class="form-label"> Manufacturer </label> <input
+									type="text" id="manufacturerName" class="form-control">
+
+							</div>
+
+							<div class="col-md-6 mb-3">
+
+								<label class="form-label"> Product Image </label> <input
+									type="file" id="image" class="form-control">
+
+							</div>
+
+							<div class="col-md-6 mb-3">
+
+								<label class="form-label"> Manufacture Date </label> <input
+									type="date" id="manufactureDate" class="form-control">
+
+							</div>
+
+							<div class="col-md-6 mb-3">
+
+								<label class="form-label"> Expiry Date </label> <input
+									type="date" id="expiryDate" class="form-control">
+
+							</div>
+
+							<div class="col-md-6 mb-3">
+
+								<label class="form-label"> Created By </label> <input
+									type="number" id="createdBy" class="form-control">
+
+							</div>
+
+						</div>
+
+					</form>
+
+				</div>
+
+				<div class="modal-footer">
+
+					<button class="btn btn-secondary" data-bs-dismiss="modal">
+
+						Cancel</button>
+
+					<button class="btn btn-success"
+						onclick="$('#productForm').submit();">Save Product</button>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<!-- DELETE PRODUCT MODAL -->
+
+	<div class="modal fade" id="deleteProductModal" tabindex="-1">
+
+		<div class="modal-dialog">
+
+			<div class="modal-content">
+
+				<div class="modal-header bg-danger text-white">
+
+					<h5 class="modal-title">Delete Product</h5>
+
+					<button type="button" class="btn-close btn-close-white"
+						data-bs-dismiss="modal" aria-label="Close"></button>
+
+				</div>
+
+				<div class="modal-body">
+
+					<div class="alert alert-warning mb-3">
+
+						<strong>Confirm Deletion</strong>
+
+					</div>
+
+					Are you sure you want to delete this product?
+
+				</div>
+
+				<div class="modal-footer">
+
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">Cancel</button>
+
+					<button type="button" class="btn btn-danger"
+						id="confirmDeleteProduct">Delete</button>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<script>
 let deleteProductId = 0;
 let deleteModal;
+let table;
 
-$(document).ready(function(){
+$(document).ready(function () {
+
+    if (!$.fn.DataTable.isDataTable('#productTable')) {
+
+        table = $("#productTable").DataTable({
+
+            responsive: true,
+
+            pageLength: 5,
+
+            lengthMenu: [5, 10, 25, 50]
+
+        });
+
+    }
 
     loadProducts();
 
-    $("#searchBox").keyup(function(){
+    $("#searchBox").keyup(function () {
 
         let keyword = $(this).val();
 
-        if(keyword.trim() === ""){
+        if (keyword.trim() === "") {
 
             loadProducts();
 
-        }else{
+        } else {
 
             searchProducts(keyword);
+
         }
+
     });
 
 });
-
 
 /* ===========================
    ADD/UPADTE PRODUCT
 =========================== */
 
 $("#productForm").submit(function(e){
-
+	  
     e.preventDefault();
 
     let id = $("#productId").val();
 
     let product = {
+        productId: parseInt($("#productId").val()) || 0,
 
         productName: $("#productName").val(),
         category: $("#category").val(),
@@ -287,12 +418,15 @@ $("#productForm").submit(function(e){
 
     let url = "/DmartWebApp/api/products";
     let method = "POST";
+    
 
     if(id != ""){
         url = "/DmartWebApp/api/products/" + id;
         method = "PUT";
     }
-
+    console.log("Method:", method);
+    console.log("URL:", url);
+    console.log(product);
     $.ajax({
 
         url: url,
@@ -312,6 +446,10 @@ $("#productForm").submit(function(e){
             $("#productForm")[0].reset();
 
             $("#productId").val("");
+
+            bootstrap.Modal
+            .getInstance(document.getElementById("productModal"))
+            .hide();
 
             loadProducts();
 
@@ -388,96 +526,144 @@ function searchProducts(id){
 =========================== */
 
 function renderTable(products){
+	 if(!table){
+	        return;
+	    }
 
     let rows = "";
 
     $.each(products,function(index,p){
 
-        let stockBadge = "";
+        let stockBadge="";
 
-        if(p.quantity < 10){
+        if(p.quantity<10){
 
-            stockBadge =
+            stockBadge=
             "<span class='badge bg-danger'>Low Stock</span>";
 
         }else{
 
-            stockBadge =
-            "<span class='badge bg-success'>Available</span>";
+            stockBadge=
+            "<span class='badge bg-success'>In Stock</span>";
+
         }
 
+        let expiryBadge="";
 
-        let expiryBadge = "";
+        let today=new Date();
 
-        let today =
-            new Date();
+        let expiry=new Date(p.expiryDate);
 
-        let expiry =
-            new Date(p.expiryDate);
+        let diff=(expiry-today)/(1000*60*60*24);
 
-        let diff =
-            (expiry - today)
-            /(1000*60*60*24);
+        if(diff<7){
 
-        if(diff < 7){
-
-            expiryBadge =
+            expiryBadge=
             "<span class='badge bg-warning text-dark'>Expiring Soon</span>";
+
+        }else{
+
+            expiryBadge=
+            "<span class='badge bg-success'>Good</span>";
+
         }
 
-        rows += `
-        	<tr>
+        rows +=`
 
-        	<td>${p.productId}</td>
+<tr>
 
-        	<td>${p.productName}</td>
+<td>${p.productId}</td>
 
-        	<td>${p.category}</td>
 
-        	<td>${p.price}</td>
 
-        	<td>
-        	${p.quantity}
-        	<br>
-        	${stockBadge}
-        	</td>
+<td>
 
-        	<td>${p.manufacturerName}</td>
+<b>${p.productName}</b>
 
-        	<td>${formatDate(p.manufactureDate)}</td>
+</td>
 
-        	<td>${formatDate(p.expiryDate)}</td>
+<td>
 
-        	<td>
-        	${stockBadge}
-        	</td>
+${p.category}
 
-        	<td>
+</td>
 
-        	<button class="btn btn-warning btn-sm"
-        	onclick="editProduct(${p.productId})">
+<td>
 
-        	Edit
+₹ ${p.price}
 
-        	</button>
+</td>
 
-        	<button class="btn btn-danger btn-sm ms-2"
-        	onclick="deleteProduct(${p.productId})">
+<td>
 
-        	Delete
+${p.quantity}
 
-        	</button>
+<br>
 
-        	</td>
+${stockBadge}
 
-        	</tr>
-        	`;
+</td>
+
+<td>
+
+${p.manufacturerName}
+
+</td>
+
+<td>
+
+${formatDate(p.expiryDate)}
+
+<br>
+
+${expiryBadge}
+
+</td>
+
+<td>
+
+${stockBadge}
+
+</td>
+
+<td>
+
+<button
+class="btn btn-warning btn-sm"
+onclick="editProduct(${p.productId})">
+
+<i class="bi bi-pencil-square"></i>
+
+</button>
+
+<button
+class="btn btn-danger btn-sm ms-2"
+onclick="deleteProduct(${p.productId})">
+
+<i class="bi bi-trash"></i>
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
     });
 
-    $("#productTable tbody")
-    .html(rows);
-}
+    table.clear().destroy();
 
+    $("#productTable tbody").html(rows);
+
+    table = $("#productTable").DataTable({
+        responsive: true,
+        pageLength: 5,
+        lengthMenu: [5,10,25,50],
+        destroy: true
+    });
+
+}
 
 /* ===========================
    EDIT PRODUCT
@@ -485,33 +671,49 @@ function renderTable(products){
 
 function editProduct(id){
 
-   
-
     $.ajax({
-        url:"/DmartWebApp/api/products/" + id,
-        type:"GET",
-        success:function(p){
+
+        url: "/DmartWebApp/api/products/" + id,
+
+        type: "GET",
+
+        success: function(p){
 
             $("#productId").val(p.productId);
+
             $("#productName").val(p.productName);
+
             $("#category").val(p.category);
+
             $("#price").val(p.price);
+
             $("#quantity").val(p.quantity);
+
             $("#manufacturerName").val(p.manufacturerName);
-            $("#manufactureDate").val(
-            		formatDate(p.manufactureDate));
-            $("#expiryDate").val(
-            		formatDate(p.expiryDate));
+
+            $("#manufactureDate").val(formatDate(p.manufactureDate));
+
+            $("#expiryDate").val(formatDate(p.expiryDate));
+
             $("#createdBy").val(p.createdBy);
 
-            window.scrollTo(0,0);
-        },
-        error:function(xhr){
+            $("#productModalTitle").text("Update Product");
 
-            console.log(xhr.responseText);
-            showProductAlert("Unable to load product.", "danger");
+            new bootstrap.Modal(
+                document.getElementById("productModal")
+            ).show();
+
+        },
+
+        error:function(){
+
+            showProductAlert(
+                "Unable to load product.",
+                "danger"
+            );
 
         }
+
     });
 
 }
@@ -583,6 +785,15 @@ function formatDate(date){
     String(date[1]).padStart(2,"0")+"-"+
     String(date[2]).padStart(2,"0");
 }
+function clearForm(){
+
+    $("#productForm")[0].reset();
+
+    $("#productId").val("");
+
+    $("#productModalTitle").text("Add Product");
+
+}
 function showProductAlert(message, type){
 
     $("#productAlert")
@@ -600,66 +811,9 @@ function showProductAlert(message, type){
 }
 
 </script>
+	<!-- ADD / EDIT PRODUCT MODAL -->
 
-<!-- DELETE PRODUCT MODAL -->
-
-<div class="modal fade"
-     id="deleteProductModal"
-     tabindex="-1">
-
-    <div class="modal-dialog">
-
-        <div class="modal-content">
-
-            <div class="modal-header bg-danger text-white">
-
-                <h5 class="modal-title">
-
-                    Delete Product
-
-                </h5>
-
-               <button type="button"
-        class="btn-close btn-close-white"
-        data-bs-dismiss="modal"
-        aria-label="Close">
-</button>
-
-            </div>
-
-            <div class="modal-body">
-
-                <div class="alert alert-warning mb-3">
-
-                    <strong>Confirm Deletion</strong>
-
-                </div>
-
-                Are you sure you want to delete this product?
-
-            </div>
-
-            <div class="modal-footer">
-
-               <button type="button"
-        class="btn btn-secondary"
-        data-bs-dismiss="modal">
-    Cancel
-</button>
-
-                <button type="button"
-        class="btn btn-danger"
-        id="confirmDeleteProduct">
-    Delete
-</button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
+	
 
 
 </body>
