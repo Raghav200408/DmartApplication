@@ -6,73 +6,64 @@ pageEncoding="UTF-8"%>
 <head>
 
 <meta charset="UTF-8">
-
 <title>View Bills</title>
 
+<!-- Bootstrap 5 -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
+<!-- DataTables Bootstrap 5 -->
+<link rel="stylesheet"
+href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
+
+<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+
+<style>
+body{
+    background:#f4f6f9;
+}
+.card{
+    border:none;
+    border-radius:12px;
+    box-shadow:0 .25rem .75rem rgba(0,0,0,0.08);
+}
+</style>
 
 </head>
 
-<body class="bg-light">
+<body>
 
 <div class="container mt-4">
 
-<div class="card shadow">
+<div class="card">
 
 <div class="card-header bg-success text-white">
-
-<h3>View Bills</h3>
-
+    <h3 class="mb-0">View Bills</h3>
 </div>
 
 <div class="card-body">
 
-<div class="row mb-3">
+<table id="billTable"
+       class="table table-striped table-bordered"
+       style="width:100%">
 
-<div class="col-md-12">
-
-<input type="text"
-       id="search"
-       class="form-control"
-       placeholder="Search Bill ID"
-       maxlength="10"
-       inputmode="numeric"
-       autocomplete="off">
-
-</div>
-
-
-</div>
-
-<table class="table table-bordered table-hover">
-
-<thead class="table-success">
-
+<thead>
 <tr>
-
-<th>Bill ID</th>
-
-<th>Customer</th>
-
-<th>Mobile</th>
-
-<th>Date</th>
-
-<th>Amount</th>
-
-<th>Payment</th>
-
-<th>Action</th>
-
+    <th>Bill ID</th>
+    <th>Customer</th>
+    <th>Mobile</th>
+    <th>Date</th>
+    <th>Amount</th>
+    <th>Payment</th>
+    <th>Action</th>
 </tr>
-
 </thead>
 
-<tbody id="billTable">
-
-</tbody>
+<tbody></tbody>
 
 </table>
 
@@ -84,117 +75,101 @@ pageEncoding="UTF-8"%>
 
 <script>
 
+let table;
+
 $(document).ready(function(){
-
     loadBills();
-
-    $("#search").on("input", function () {
-
-        this.value = this.value.replace(/\D/g, "");
-
-        searchBills();
-
-    });
-
 });
 
+
+// ================= LOAD DATA =================
 function loadBills(){
 
     $.ajax({
 
-        url:"/DmartWebApp/api/billing/all",
+        url: "/DmartWebApp/api/billing/all",
+        type: "GET",
+        dataType: "json",
 
-        type:"GET",
-
-        success:function(data){
-
-            renderBills(data);
-
+        success: function(data){
+            initTable(data);
         },
 
-        error:function(){
-
-            alert("Unable to load bills.");
-
+        error: function(){
+            alert("Unable to load bills");
         }
 
     });
 
 }
 
-function renderBills(data){
 
-    let rows="";
+// ================= INIT DATATABLE =================
+function initTable(data){
 
-    $.each(data,function(i,bill){
-
-        rows+=`
-
-        <tr>
-
-            <td>${bill.billId}</td>
-
-            <td>${bill.customerName}</td>
-
-            <td>${bill.mobileNumber}</td>
-
-            <td>${bill.billDate}</td>
-
-            <td>₹ ${bill.grandTotal}</td>
-
-            <td>${bill.paymentType}</td>
-
-            <td>
-
-                <button class="btn btn-primary btn-sm"
-
-                    onclick="viewInvoice(${bill.billId})">
-
-                    View
-
-                </button>
-
-            </td>
-
-        </tr>
-
-        `;
-
-    });
-
-    $("#billTable").html(rows);
-
-}
-
-function viewInvoice(billId){
-
-    window.location.href="invoice.jsp?billId="+billId;
-
-}
-
-function searchBills() {
-
-    let billId = $("#search").val().trim();
-
-    if (billId === "") {
-
-        $("#billTable tr").show();
-
-        return;
+    // destroy old instance if exists
+    if ($.fn.DataTable.isDataTable('#billTable')) {
+        $('#billTable').DataTable().destroy();
     }
 
-    $("#billTable tr").each(function () {
+    $('#billTable tbody').empty();
 
-        let currentBillId = $(this).find("td:first").text().trim();
+    table = $('#billTable').DataTable({
 
-        $(this).toggle(currentBillId.startsWith(billId));
+        data: data,
+
+        columns: [
+
+            { data: "billId", },
+
+            { data: "customerName" },
+
+            { data: "mobileNumber" },
+
+            { data: "billDate" },
+
+            {
+                data: "grandTotal",
+                render: function(data){
+                    return "₹ " + parseFloat(data).toFixed(2);
+                }
+            },
+
+            { data: "paymentType" },
+
+            {
+                data: "billId",
+                render: function(data){
+                    return `
+                        <button class="btn btn-primary btn-sm"
+                            onclick="viewInvoice(${data})">
+                            View
+                        </button>
+                    `;
+                }
+            }
+
+        ],
+
+        paging: true,
+        searching: true,   // ✅ IMPORTANT
+        ordering: true,
+        info: true,
+        lengthMenu: [5, 10, 25, 50],
+
+        destroy: true
 
     });
 
+}
+
+
+// ================= VIEW INVOICE =================
+function viewInvoice(billId){
+    window.location.href = "invoice.jsp?billId=" + billId;
 }
 
 </script>
 
 </body>
-
 </html>
