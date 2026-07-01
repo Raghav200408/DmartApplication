@@ -26,13 +26,66 @@ body {
 	border-radius: 12px;
 }
 
-.table th {
-	text-align: center;
+#cartTable th{
+    text-align:center;
+    vertical-align:middle;
 }
 
-.table td {
-	vertical-align: middle;
-	text-align: center;
+#cartTable td{
+    vertical-align:middle;
+}
+
+#cartTable td:nth-child(1),
+#cartTable td:nth-child(2),
+#cartTable td:nth-child(4),
+#cartTable td:nth-child(5),
+#cartTable td:nth-child(6),
+#cartTable td:nth-child(7){
+    text-align:center;
+}
+
+#cartTable td:nth-child(3){
+    padding-left:18px;
+}
+
+#cartTable td:last-child{
+    white-space:nowrap;
+}
+
+.cart-table-scroll{
+
+    max-height:320px;
+
+    overflow-y:auto;
+
+}
+
+.cart-table-scroll thead th{
+
+    position:sticky;
+
+    top:0;
+
+    background:#d1e7dd;
+
+    z-index:2;
+
+}
+
+.summary-table th{
+
+    width:60%;
+
+    text-align:center;
+
+}
+
+.summary-table td{
+
+    text-align:center;
+
+    font-weight:600;
+
 }
 </style>
 
@@ -100,9 +153,11 @@ body {
         CART TABLE
 ============================ -->
 
-				<div class="table-responsive">
+				<div class="table-responsive cart-table-scroll">
 
-					<table class="table table-bordered table-hover" id="cartTable">
+    <table
+        id="cartTable"
+        class="table table-bordered table-hover table-striped align-middle mb-0">
 
 						<thead class="table-success">
 
@@ -145,7 +200,7 @@ body {
 
 					<div class="col-md-5">
 
-						<table class="table table-bordered">
+						<table class="table table-bordered summary-table">
 
 							<tr>
 
@@ -333,6 +388,26 @@ let rows = "";
 
 let subtotal = 0;
 
+if(cart.length === 0){
+
+    $("#cartBody").html(`
+        <tr>
+
+            <td colspan="7"
+                class="text-center text-muted">
+
+                No products in cart
+
+            </td>
+
+        </tr>
+    `);
+
+    calculateTotal(0);
+
+    return;
+}
+
 $.each(cart,function(index,item){
 
 subtotal += item.total;
@@ -355,8 +430,9 @@ rows += `
 
     <td>
 
-        <button
-            class="btn btn-warning btn-sm"
+    <button
+    class="btn btn-warning btn-sm me-2"
+    style="width:70px;"
             onclick="editCart(${item.cartId},
                               ${item.price},
                               ${item.quantity})">
@@ -365,8 +441,9 @@ rows += `
 
         </button>
 
-        <button
-            class="btn btn-danger btn-sm ms-2"
+            <button
+            class="btn btn-danger btn-sm"
+            style="width:70px;"
             onclick="deleteCart(${item.cartId})">
 
             Delete
