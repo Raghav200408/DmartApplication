@@ -1,6 +1,5 @@
-<%@ page language="java"
-contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 
@@ -13,383 +12,339 @@ pageEncoding="UTF-8"%>
 <title>Shopping Cart</title>
 
 <link
-href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-rel="stylesheet">
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
 
-<script
-src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <style>
-
-body{
-
-    background:#f5f5f5;
-
+body {
+	background: #f5f5f5;
 }
 
-.card{
-
-    border-radius:12px;
-
+.card {
+	border-radius: 12px;
 }
 
-.table th{
-
+#cartTable th{
     text-align:center;
-
-}
-
-.table td{
-
     vertical-align:middle;
+}
+
+#cartTable td{
+    vertical-align:middle;
+}
+
+#cartTable td:nth-child(1),
+#cartTable td:nth-child(2),
+#cartTable td:nth-child(4),
+#cartTable td:nth-child(5),
+#cartTable td:nth-child(6),
+#cartTable td:nth-child(7){
+    text-align:center;
+}
+
+#cartTable td:nth-child(3){
+    padding-left:18px;
+}
+
+#cartTable td:last-child{
+    white-space:nowrap;
+}
+
+.cart-table-scroll{
+
+    max-height:320px;
+
+    overflow-y:auto;
+
+}
+
+.cart-table-scroll thead th{
+
+    position:sticky;
+
+    top:0;
+
+    background:#d1e7dd;
+
+    z-index:2;
+
+}
+
+.summary-table th{
+
+    width:60%;
 
     text-align:center;
 
 }
 
+.summary-table td{
+
+    text-align:center;
+
+    font-weight:600;
+
+}
 </style>
 
 </head>
 
 <body>
 
-<div class="container mt-4">
+	<div class="container mt-4">
 
-<div class="card shadow">
+		<div class="card shadow">
 
-<div class="card-header text-white" style="background:#198754;">
+			<div class="card-header text-white" style="background: #198754;">
 
-<h3>
+				<h3>Shopping Cart</h3>
 
-Shopping Cart
+			</div>
 
-</h3>
+			<div class="card-body">
 
-</div>
+				<div class="card border-0 bg-light mb-3">
 
-<div class="card-body">
+    <div class="card-body">
 
-<div class="row">
+        <h5 class="text-success mb-3">
+            Customer Information
+        </h5>
 
-<div class="col-md-2">
+        <div class="row">
 
-<label>
+            <div class="col-md-2">
 
-Customer ID
+                <strong>Customer ID</strong><br>
 
-</label>
+                <span id="customerId"
+                      class="fs-5 fw-semibold"></span>
 
-<input
-type="text"
-id="customerId"
-class="form-control"
-readonly>
+            </div>
 
-</div>
+            <div class="col-md-5">
 
-<div class="col-md-5">
+                <strong>Customer Name</strong><br>
 
-<label>
+                <span id="customerName"
+                      class="fs-5 fw-semibold"></span>
 
-Customer Name
+            </div>
 
-</label>
+            <div class="col-md-5">
 
-<input
-type="text"
-id="customerName"
-class="form-control"
-readonly>
+                <strong>Mobile Number</strong><br>
 
-</div>
+                <span id="customerMobile"
+                      class="fs-5 fw-semibold"></span>
 
-<div class="col-md-5">
+            </div>
 
-<label>
+        </div>
 
-Mobile Number
-
-</label>
-
-<input
-type="text"
-id="customerMobile"
-class="form-control"
-readonly>
+    </div>
 
 </div>
 
-</div>
-
-<hr>
-<!-- ===========================
+				<hr>
+				<!-- ===========================
         CART TABLE
 ============================ -->
 
-<div class="table-responsive">
+				<div class="table-responsive cart-table-scroll">
 
-<table
-class="table table-bordered table-hover"
-id="cartTable">
+    <table
+        id="cartTable"
+        class="table table-bordered table-hover table-striped align-middle mb-0">
 
-<thead class="table-success">
+						<thead class="table-success">
 
-<tr>
+							<tr>
 
-<th>Cart ID</th>
+								<th>Cart ID</th>
 
-<th>Product ID</th>
+								<th>Product ID</th>
 
-<th>Product Name</th>
+								<th>Product Name</th>
 
-<th>Price</th>
+								<th>Price</th>
 
-<th>Quantity</th>
+								<th>Quantity</th>
 
-<th>Total</th>
+								<th>Total</th>
 
-<th width="180">
+								<th width="180">Actions</th>
 
-Actions
+							</tr>
 
-</th>
+						</thead>
 
-</tr>
+						<tbody id="cartBody">
 
-</thead>
+						</tbody>
 
-<tbody id="cartBody">
+					</table>
 
-</tbody>
-
-</table>
-
-</div>
+				</div>
 
 
-<!-- ===========================
+				<!-- ===========================
         BILL SUMMARY
 ============================ -->
 
-<div class="row mt-4">
+				<div class="row mt-4">
 
-<div class="col-md-7">
+					<div class="col-md-7"></div>
 
-</div>
+					<div class="col-md-5">
 
-<div class="col-md-5">
+						<table class="table table-bordered summary-table">
 
-<table class="table table-bordered">
+							<tr>
 
-<tr>
+								<th>Subtotal</th>
 
-<th>
+								<td id="subTotal">₹0.00</td>
 
-Subtotal
+							</tr>
 
-</th>
+							<tr>
 
-<td id="subTotal">
+								<th>GST (5%)</th>
 
-₹0.00
+								<td id="gstAmount">₹0.00</td>
 
-</td>
+							</tr>
 
-</tr>
+							<tr class="table-success">
 
-<tr>
+								<th>Grand Total</th>
 
-<th>
+								<td id="grandTotal">₹0.00</td>
 
-GST (5%)
+							</tr>
 
-</th>
+						</table>
 
-<td id="gstAmount">
+					</div>
 
-₹0.00
-
-</td>
-
-</tr>
-
-<tr class="table-success">
-
-<th>
-
-Grand Total
-
-</th>
-
-<td id="grandTotal">
-
-₹0.00
-
-</td>
-
-</tr>
-
-</table>
-
-</div>
-
-</div>
+				</div>
 
 
-<!-- ===========================
+				<!-- ===========================
         BUTTONS
 ============================ -->
 
-<div class="text-end mt-3">
+				<div class="text-end mt-3">
 
-<button
-class="btn btn-primary"
-id="continueShopping">
+					<button class="btn btn-primary" id="continueShopping">
 
-Continue Shopping
+						Continue Shopping</button>
 
-</button>
+					<button class="btn btn-success" id="generateBill">
 
-<button
-class="btn btn-success"
-id="generateBill">
+						Generate Bill</button>
 
-Generate Bill
+				</div>
 
-</button>
+			</div>
 
-</div>
+		</div>
 
-</div>
+	</div>
 
-</div>
+	<!-- Edit Quantity Modal -->
+	<div class="modal fade" id="editCartModal" tabindex="-1">
 
-</div>
+		<div class="modal-dialog">
 
-<!-- Edit Quantity Modal -->
-<div class="modal fade" id="editCartModal" tabindex="-1">
+			<div class="modal-content">
 
-    <div class="modal-dialog">
+				<div class="modal-header bg-warning">
 
-        <div class="modal-content">
+					<h5 class="modal-title">Edit Quantity</h5>
 
-            <div class="modal-header bg-warning">
+					<button type="button" class="btn-close" data-bs-dismiss="modal">
+					</button>
 
-                <h5 class="modal-title">Edit Quantity</h5>
+				</div>
 
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal">
-                </button>
+				<div class="modal-body">
 
-            </div>
+					<input type="hidden" id="editCartId"> <input type="hidden"
+						id="editPrice"> <label>Quantity</label> <input
+						type="number" id="editQuantity" class="form-control" min="1">
 
-            <div class="modal-body">
+				</div>
 
-                <input type="hidden" id="editCartId">
+				<div class="modal-footer">
 
-                <input type="hidden" id="editPrice">
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">Cancel</button>
 
-                <label>Quantity</label>
+					<button type="button" class="btn btn-success" id="updateCartBtn">
 
-                <input
-                    type="number"
-                    id="editQuantity"
-                    class="form-control"
-                    min="1">
+						Update</button>
 
-            </div>
+				</div>
 
-            <div class="modal-footer">
+			</div>
 
-                <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal">
+		</div>
 
-                    Cancel
+	</div>
+	<!-- Delete Cart Modal -->
+	<div class="modal fade" id="deleteCartModal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
 
-                </button>
+				<div class="modal-header bg-danger text-white">
+					<h5 class="modal-title">Delete Cart Item</h5>
 
-                <button
-                    type="button"
-                    class="btn btn-success"
-                    id="updateCartBtn">
+					<button type="button" class="btn-close btn-close-white"
+						data-bs-dismiss="modal"></button>
+				</div>
 
-                    Update
+				<div class="modal-body">Are you sure you want to remove this
+					product?</div>
 
-                </button>
+				<div class="modal-footer">
 
-            </div>
+					<button class="btn btn-secondary" data-bs-dismiss="modal">
+						Cancel</button>
 
-        </div>
+					<button class="btn btn-danger" id="confirmDeleteCart">
+						Delete</button>
 
-    </div>
+				</div>
 
-</div>
-<!-- Delete Cart Modal -->
-<div class="modal fade" id="deleteCartModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
+			</div>
+		</div>
+	</div>
 
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">Delete Cart Item</h5>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-                <button type="button"
-                        class="btn-close btn-close-white"
-                        data-bs-dismiss="modal">
-                </button>
-            </div>
-
-            <div class="modal-body">
-                Are you sure you want to remove this product?
-            </div>
-
-            <div class="modal-footer">
-
-                <button class="btn btn-secondary"
-                        data-bs-dismiss="modal">
-                    Cancel
-                </button>
-
-                <button class="btn btn-danger"
-                        id="confirmDeleteCart">
-                    Delete
-                </button>
-
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<script
-src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
+	<script>
 let deleteCartId = 0;
 
 $(document).ready(function(){
 
     let params = new URLSearchParams(window.location.search);
 
-    $("#customerId").val(
+    $("#customerId").text(
+    	    params.get("customerId")
+    	);
 
-        params.get("customerId")
+    	$("#customerName").text(
+    	    params.get("customerName")
+    	);
 
-    );
-
-    $("#customerName").val(
-
-        params.get("customerName")
-
-    );
-
-    $("#customerMobile").val(
-
-        params.get("mobile")
-
-    );
+    	$("#customerMobile").text(
+    	    params.get("mobile")
+    	);
 
     loadCart();
 
@@ -400,7 +355,7 @@ LOAD CART
 
 function loadCart(){
 
-let customerId = $("#customerId").val();
+let customerId = $("#customerId").text();
 
 $.ajax({
 
@@ -433,6 +388,26 @@ let rows = "";
 
 let subtotal = 0;
 
+if(cart.length === 0){
+
+    $("#cartBody").html(`
+        <tr>
+
+            <td colspan="7"
+                class="text-center text-muted">
+
+                No products in cart
+
+            </td>
+
+        </tr>
+    `);
+
+    calculateTotal(0);
+
+    return;
+}
+
 $.each(cart,function(index,item){
 
 subtotal += item.total;
@@ -455,8 +430,9 @@ rows += `
 
     <td>
 
-        <button
-            class="btn btn-warning btn-sm"
+    <button
+    class="btn btn-warning btn-sm me-2"
+    style="width:70px;"
             onclick="editCart(${item.cartId},
                               ${item.price},
                               ${item.quantity})">
@@ -465,8 +441,9 @@ rows += `
 
         </button>
 
-        <button
-            class="btn btn-danger btn-sm ms-2"
+            <button
+            class="btn btn-danger btn-sm"
+            style="width:70px;"
             onclick="deleteCart(${item.cartId})">
 
             Delete
@@ -621,10 +598,9 @@ GENERATE BILL
 
 $("#generateBill").click(function(){
 
-    let customerId = $("#customerId").val();
-    let customerName = $("#customerName").val();
-    let mobile = $("#customerMobile").val();
-
+	let customerId = $("#customerId").text();
+	let customerName = $("#customerName").text();
+	let mobile = $("#customerMobile").text();
     window.location.href =
         "billing.jsp?customerId=" + customerId +
         "&customerName=" + encodeURIComponent(customerName) +

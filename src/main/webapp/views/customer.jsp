@@ -15,6 +15,11 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet">
 
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/2.3.2/css/dataTables.bootstrap5.css">
+	
+	
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <style>
@@ -45,6 +50,61 @@ body {
 #purchaseBtn {
 	display: none;
 }
+
+.dataTables_wrapper .dataTables_filter{
+    margin-bottom:15px;
+}
+
+.dataTables_wrapper .dataTables_length{
+    margin-bottom:15px;
+}
+
+.dataTables_wrapper .dataTables_info{
+    padding-top:15px;
+}
+
+.dataTables_wrapper .pagination{
+    margin-top:15px;
+}
+
+#customerTable th,
+#customerTable td{
+    vertical-align: middle;
+}
+
+#customerTable th{
+    text-align:center;
+}
+
+#customerTable td:nth-child(1){
+    text-align:center;
+}
+
+#customerTable td:nth-child(4){
+    text-align:center;
+    white-space:nowrap;
+}
+
+.cart-preview-scroll{
+
+    max-height:220px;
+
+    overflow-y:auto;
+
+}
+
+.cart-preview-scroll thead th{
+
+    position:sticky;
+
+    top:0;
+
+    background:#fff3cd;
+
+    z-index:2;
+
+}
+
 </style>
 
 </head>
@@ -55,30 +115,24 @@ body {
 
 		<div class="card shadow">
 
-			<div class="card-header text-white" style="background:#198754;">
+			<div class="card-header text-white" style="background: #198754;">
 
 				<h3>Customer Management</h3>
 
 			</div>
 
 			<div class="card-body">
-			<div id="customerAlert"
-     class="alert d-none mb-3"
-     role="alert">
-</div>
+				<div id="customerAlert" class="alert d-none mb-3" role="alert">
+				</div>
 
 				<div class="row">
 
 					<div class="col-md-8">
 
 						<label class="form-label"> Mobile Number </label> <input
-    type="tel"
-    class="form-control"
-    id="searchMobile"
-    maxlength="10"
-    inputmode="numeric"
-    autocomplete="off"
-    placeholder="Enter 10-digit Mobile Number">
+							type="tel" class="form-control" id="searchMobile" maxlength="10"
+							inputmode="numeric" autocomplete="off"
+							placeholder="Enter 10-digit Mobile Number">
 
 					</div>
 
@@ -87,8 +141,8 @@ body {
 						<label>&nbsp;</label>
 
 						<button class="btn btn-success" id="searchBtn">
-    <i class="bi bi-search"></i> Search Customer
-</button>
+							<i class="bi bi-search"></i> Search Customer
+						</button>
 
 					</div>
 
@@ -182,72 +236,60 @@ body {
 
 		</div>
 
-	<!-- =====================================
+		<!-- =====================================
         REGISTERED CUSTOMERS
 ====================================== -->
 
-	<div class="card shadow mt-4">
+		<div class="card shadow mt-4">
 
-		<div class="card-header bg-dark text-white">
+			<div class="card-header bg-dark text-white">
 
-			<div class="row">
-
-				<div class="col-md-6">
-
-					<h5 class="mb-0">Registered Customers</h5>
-
-				</div>
-
-				<div class="col-md-6">
-
-					<input
-    type="text"
-    id="customerSearch"
-    class="form-control"
-    placeholder="Search Customer By Name or Mobile">
-
-				</div>
+				<h5 class="mb-0">
+    Registered Customers
+</h5>
 
 			</div>
 
-		</div>
+			<div class="card-body p-0">
 
-		<div class="card-body p-0">
+				<div class="table-responsive">
 
-    <div class="table-responsive">
+    <table id="customerTable"
+           class="table table-hover table-striped align-middle mb-0">
 
-        <table class="table table-bordered table-hover table-striped mb-0"
-            id="customerTable">
+        <thead class="table-success">
 
-				<thead class="table-primary">
+            <tr>
+                <th>Customer ID</th>
+                <th>Customer Name</th>
+                <th>Mobile Number</th>
+                <th style="width:180px;text-align:center;">
+    Actions
+</th>
+            </tr>
 
-					<tr>
+        </thead>
 
-						<th>Customer ID</th>
+        <tbody>
 
-						<th>Customer Name</th>
+        </tbody>
 
-						<th>Mobile Number</th>
-
-						<th width="180">Actions</th>
-
-					</tr>
-
-				</thead>
-
-				<tbody>
-
-				</tbody>
-
-			</table>
-
-</div>   <!-- table-responsive -->
-
-</div>   <!-- card-body -->
-
-</div>   <!-- Registered Customers card -->
+    </table>
 
 </div>
+
+							
+
+				</div>
+				<!-- table-responsive -->
+
+			</div>
+			<!-- card-body -->
+
+		</div>
+		<!-- Registered Customers card -->
+
+	</div>
 	<!-- =====================================
         PRODUCT PURCHASE MODAL
 ====================================== -->
@@ -269,11 +311,9 @@ body {
 				</div>
 
 				<div class="modal-body">
-				
-				<div id="productAlert"
-     class="alert d-none mb-3"
-     role="alert">
-</div>
+
+					<div id="productAlert" class="alert d-none mb-3" role="alert">
+					</div>
 
 					<div class="row mb-3">
 
@@ -287,8 +327,8 @@ body {
 						<div class="col-md-4">
 
 							<button class="btn btn-success w-100" id="searchProductBtn">
-    <i class="bi bi-search"></i> Search Product
-</button>
+								<i class="bi bi-search"></i> Search Product
+							</button>
 
 						</div>
 
@@ -323,6 +363,45 @@ body {
 						</tbody>
 
 					</table>
+					
+					<hr class="my-2">
+
+<h5 class="mb-3">
+    Cart Preview
+</h5>
+
+<div class="table-responsive cart-preview-scroll">
+
+    <table class="table table-bordered table-hover mb-0">
+
+        <thead class="table-warning">
+<tr>
+    <th>ID</th>
+    <th>Product</th>
+    <th>Qty</th>
+    <th>Price</th>
+    <th>Total</th>
+    <th width="120">Action</th>
+</tr>
+</thead>
+
+        <tbody id="cartPreviewBody">
+
+            <tr>
+
+                <td colspan="6" class="text-center text-muted">
+
+                    No products added yet
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
 
 				</div>
 
@@ -344,63 +423,47 @@ body {
 
 	</div>
 
-<!-- Delete Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1">
+	<!-- Delete Modal -->
+	<div class="modal fade" id="deleteModal" tabindex="-1">
 
-    <div class="modal-dialog">
+		<div class="modal-dialog">
 
-        <div class="modal-content">
+			<div class="modal-content">
 
-            <div class="modal-header bg-danger text-white">
+				<div class="modal-header bg-danger text-white">
 
-                <h5 class="modal-title">
-                    Delete Customer
-                </h5>
+					<h5 class="modal-title">Delete Customer</h5>
 
-                <button
-                    type="button"
-                    class="btn-close btn-close-white"
-                    data-bs-dismiss="modal">
-                </button>
+					<button type="button" class="btn-close btn-close-white"
+						data-bs-dismiss="modal"></button>
 
-            </div>
+				</div>
 
-            <div class="modal-body" id="deleteModalBody">
+				<div class="modal-body" id="deleteModalBody">Are you sure you
+					want to delete this customer?</div>
 
-    Are you sure you want to delete this customer?
+				<div class="modal-footer">
 
-</div>
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">Cancel</button>
 
-            <div class="modal-footer">
+					<button type="button" class="btn btn-danger" id="confirmDelete">
 
-                <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal">
+						Delete</button>
 
-                    Cancel
+				</div>
 
-                </button>
+			</div>
 
-                <button
-                    type="button"
-                    class="btn btn-danger"
-                    id="confirmDelete">
+		</div>
 
-                    Delete
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
+	</div>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-		
+		<script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.bootstrap5.js"></script>
+
 	<script>
 	
 	let deleteCustomerId = 0;
@@ -642,50 +705,73 @@ RENDER CUSTOMER TABLE
 
 function renderCustomerTable(customers){
 
-let rows="";
+    if($.fn.DataTable.isDataTable("#customerTable")){
+        $("#customerTable").DataTable().destroy();
+    }
 
-$.each(customers,function(index,c){
+    let rows = "";
 
-  rows += `
+    $.each(customers,function(index,c){
 
-  <tr>
+        rows += `
 
-      <td>${c.customerId}</td>
+        <tr>
 
-      <td>${c.customerName}</td>
+            <td>${c.customerId}</td>
 
-      <td>${c.mobileNumber}</td>
+            <td>${c.customerName}</td>
 
-      <td>
+            <td>${c.mobileNumber}</td>
 
-          <button
-              class="btn btn-warning btn-sm"
-              onclick="editCustomer(${c.customerId})">
+            <td class="text-center">
 
-              Edit
+            <button
+                class="btn btn-warning btn-sm me-2"
+                onclick="editCustomer(${c.customerId})">
 
-          </button>
+                Edit
 
-          <button
-              class="btn btn-danger btn-sm ms-2"
-              onclick="deleteCustomer(${c.customerId})">
+            </button>
 
-              Delete
+            <button
+                class="btn btn-danger btn-sm"
+                onclick="deleteCustomer(${c.customerId})">
 
-          </button>
+                Delete
 
-      </td>
+            </button>
 
-  </tr>
+        </td>
 
-  `;
+        </tr>
 
-});
+        `;
 
-$("#customerTable tbody").html(rows);
+    });
+
+    $("#customerTable tbody").html(rows);
+
+    $("#customerTable").DataTable({
+
+        destroy:true,
+
+        responsive:true,
+
+        pageLength:10,
+
+        lengthMenu:[5,10,25,50],
+
+        language:{
+
+            search:"",
+
+            searchPlaceholder:"Search customer..."
+
+        }
+
+    });
 
 }
-
 
 /*====================================
 EDIT CUSTOMER
@@ -839,22 +925,6 @@ $("#confirmDelete").click(function(){
 SEARCH CUSTOMER TABLE
 =====================================*/
 
-$("#customerSearch").keyup(function(){
-
-let value=$(this).val().toLowerCase();
-
-$("#customerTable tbody tr").filter(function(){
-
-  $(this).toggle(
-
-      $(this).text().toLowerCase().indexOf(value)>-1
-
-  );
-
-});
-
-});
-
 
 /*====================================
 PURCHASE PRODUCTS
@@ -862,17 +932,17 @@ PURCHASE PRODUCTS
 
 $("#purchaseBtn").click(function(){
 
-let modal = new bootstrap.Modal(
+    let modal = new bootstrap.Modal(
+        document.getElementById("productModal")
+    );
 
-  document.getElementById("productModal")
+    modal.show();
 
-);
+    $("#productIdSearch").val("");
 
-modal.show();
+    $("#productTable tbody").html("");
 
-$("#productIdSearch").val("");
-
-$("#productTable tbody").html("");
+    loadCartPreview();
 
 });
 
@@ -1019,7 +1089,15 @@ function addToCart(productId, price, stock){
 
         	showProductAlert(response,"success");
 
-            $("#qty"+productId).val(1);
+        	$("#qty"+productId).val(1);
+
+        	$("#productIdSearch").val("");
+
+        	$("#productTable tbody").empty();
+
+        	$("#productIdSearch").focus();
+
+        	loadCartPreview();
 
         },
 
@@ -1030,6 +1108,118 @@ function addToCart(productId, price, stock){
         }
 
     });
+
+}
+
+/*====================================
+LOAD CART PREVIEW
+=====================================*/
+
+function loadCartPreview(){
+
+let customerId = $("#customerId").val();
+
+$.ajax({
+
+  url:"/DmartWebApp/api/cart/" + customerId,
+
+  type:"GET",
+
+  success:function(cart){
+
+      let rows = "";
+
+      let subtotal = 0;
+
+      let totalItems = 0;
+
+      if(cart.length==0){
+
+          rows = `
+              <tr>
+        	  <td colspan="6" class="text-center text-muted">
+                      No products added yet
+                  </td>
+              </tr>
+          `;
+
+          $("#cartPreviewBody").html(rows);
+
+          return;
+
+      }
+
+      $.each(cart,function(i,item){
+
+          subtotal += item.total;
+
+          totalItems += item.quantity;
+
+          rows += `
+        	  <tr>
+
+        	      <td>${item.productId}</td>
+
+        	      <td>${item.productName}</td>
+
+        	      <td>${item.quantity}</td>
+
+        	      <td>₹ ${item.price}</td>
+
+        	      <td>₹ ${item.total}</td>
+
+        	      <td>
+
+        	          <button
+        	              class="btn btn-danger btn-sm"
+        	              onclick="removePreviewItem(${item.cartId})">
+
+        	              Delete
+
+        	          </button>
+
+        	      </td>
+
+        	  </tr>
+        	  `;
+
+      });
+
+      rows += `
+    	  <tr class="table-light">
+
+    	      <td colspan="6">
+
+    	          <div class="d-flex justify-content-between">
+
+    	              <strong>Items : ${totalItems}</strong>
+
+    	              <strong>Subtotal : ₹ ${subtotal.toFixed(2)}</strong>
+
+    	          </div>
+
+    	      </td>
+
+    	  </tr>
+    	  `;
+
+      $("#cartPreviewBody").html(rows);
+
+  },
+
+  error:function(){
+
+      $("#cartPreviewBody").html(`
+          <tr>
+              <td colspan="5" class="text-center text-danger">
+                  Unable to load cart.
+              </td>
+          </tr>
+      `);
+
+  }
+
+});
 
 }
 /*====================================
@@ -1077,15 +1267,40 @@ $("#productTable tbody").html("");
 RESET PRODUCT SEARCH
 =====================================*/
 
-$("#productIdSearch").keypress(function(e){
+$("#productIdSearch").keydown(function(e){
 
-if(e.which==13){
+    if(e.key === "Enter"){
 
-  $("#searchProductBtn").click();
+        e.preventDefault();   // Prevent form submission
+        $("#searchProductBtn").click();
 
-}
+    }
 
 });
+
+function removePreviewItem(cartId){
+
+    $.ajax({
+
+        url : "/DmartWebApp/api/cart/" + cartId,
+
+        type : "DELETE",
+
+        success:function(){
+
+            loadCartPreview();
+
+        },
+
+        error:function(){
+
+            showProductAlert("Unable to remove product.","danger");
+
+        }
+
+    });
+
+}
 
 
 </script>

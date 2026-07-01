@@ -239,14 +239,6 @@ thead {
 
 </div>
 
-<hr>
-
-<div
-class="row"
-id="latestProducts">
-
-</div>
-
 		<div class="row g-4">
 			<div class="col-lg-6">
 				<div class="table-card">
@@ -290,6 +282,7 @@ id="latestProducts">
 	</div>
 	
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 
 const username = "<%= session.getAttribute("username") %>";
@@ -515,14 +508,180 @@ function renderLatestProducts(products){
 
 }
 
-function viewProduct(productId){
+function viewProduct(id){
 
-    window.location.href =
-        "products.jsp?productId=" + productId;
+    $.ajax({
+
+        url:"/DmartWebApp/api/products/" + id,
+
+        type:"GET",
+
+        success:function(p){
+
+            $("#vId").text(p.productId);
+            $("#vName").text(p.productName);
+            $("#vCategory").text(p.category);
+            $("#vPrice").text("₹ " + p.price);
+            $("#vQty").text(p.quantity);
+            $("#vManufacturer").text(p.manufacturerName);
+            $("#vMfg").text(formatDate(p.manufactureDate));
+            $("#vExp").text(formatDate(p.expiryDate));
+
+            if(p.quantity<=10){
+
+                $("#vStatus").html(
+                    "<span class='badge bg-warning text-dark'>Low Stock</span>"
+                );
+
+            }else{
+
+                $("#vStatus").html(
+                    "<span class='badge bg-success'>In Stock</span>"
+                );
+
+            }
+
+            $("#viewImage").attr(
+                "src",
+                "/DmartWebApp/images/" + p.imagePath
+            );
+
+            new bootstrap.Modal(
+                document.getElementById("viewProductModal")
+            ).show();
+
+        }
+
+    });
+
+}
+
+function formatDate(date){
+
+    if(date==null)
+        return "";
+
+    return date[0]+"-"+
+           String(date[1]).padStart(2,"0")+"-"+
+           String(date[2]).padStart(2,"0");
 
 }
 
 
 </script>
+<div class="modal fade"
+     id="viewProductModal"
+     tabindex="-1">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-success text-white">
+
+                <h4 class="modal-title">
+
+                    <i class="bi bi-box-seam"></i>
+
+                    Product Details
+
+                </h4>
+
+                <button
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+
+                    <div class="col-md-4 text-center">
+
+                        <img
+                            id="viewImage"
+                            class="img-fluid rounded border shadow"
+                            style="height:240px;
+                                   width:100%;
+                                   object-fit:contain;">
+
+                    </div>
+
+                    <div class="col-md-8">
+
+                        <table class="table table-borderless">
+
+                            <tr>
+                                <th width="180">Product ID</th>
+                                <td>: <span id="vId"></span></td>
+                            </tr>
+
+                            <tr>
+                                <th>Product Name</th>
+                                <td>: <span id="vName"></span></td>
+                            </tr>
+
+                            <tr>
+                                <th>Category</th>
+                                <td>: <span id="vCategory"></span></td>
+                            </tr>
+
+                            <tr>
+                                <th>Price</th>
+                                <td>: <span id="vPrice"></span></td>
+                            </tr>
+
+                            <tr>
+                                <th>Quantity</th>
+                                <td>: <span id="vQty"></span></td>
+                            </tr>
+
+                            <tr>
+                                <th>Manufacturer</th>
+                                <td>: <span id="vManufacturer"></span></td>
+                            </tr>
+
+                            <tr>
+                                <th>Manufacture Date</th>
+                                <td>: <span id="vMfg"></span></td>
+                            </tr>
+
+                            <tr>
+                                <th>Expiry Date</th>
+                                <td>: <span id="vExp"></span></td>
+                            </tr>
+
+                            <tr>
+                                <th>Status</th>
+                                <td>: <span id="vStatus"></span></td>
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                    Close
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 </body>
 </html>
